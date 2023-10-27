@@ -59,30 +59,34 @@ export function GetInspiration({ video, setVideo }) {
       {video.data && !taskVideo && <Video url={video?.data?.hls.video_url} />}
       {!video.data && !taskVideo && <p>Please Upload a video</p>}
       {taskVideo && <Video url={taskVideo.video_url} />}
-      {field1Result.result?.length > 0 ||
-      field2Result.result?.length > 0 ||
-      field3Result.result?.length > 0 ? (
+      {!taskVideo &&
+      (field1Result.result?.length > 0 ||
+        field2Result.result?.length > 0 ||
+        field3Result.result?.length > 0) ? (
         <div className="videoTitle">{vidTitleClean}</div>
       ) : null}{" "}
-      <InputForm
-        field1Prompt={field1Prompt}
-        setField1Prompt={setField1Prompt}
-        field2Prompt={field2Prompt}
-        setField2Prompt={setField2Prompt}
-        field3Prompt={field3Prompt}
-        setField3Prompt={setField3Prompt}
-        field1={field1}
-        field2={field2}
-        field3={field3}
-        generate={generate}
-        setField1Result={setField1Result}
-        setField2Result={setField2Result}
-        setField3Result={setField3Result}
-        setLoading={setLoading}
-        loading={loading}
-      />
+      {!taskVideo && (
+        <InputForm
+          field1Prompt={field1Prompt}
+          setField1Prompt={setField1Prompt}
+          field2Prompt={field2Prompt}
+          setField2Prompt={setField2Prompt}
+          field3Prompt={field3Prompt}
+          setField3Prompt={setField3Prompt}
+          field1={field1}
+          field2={field2}
+          field3={field3}
+          generate={generate}
+          setField1Result={setField1Result}
+          setField2Result={setField2Result}
+          setField3Result={setField3Result}
+          setLoading={setLoading}
+          loading={loading}
+        />
+      )}
       {loading && <p>Loading...</p>}
       {!loading &&
+        !taskVideo &&
         (field1Result.result?.length > 0 ||
           field2Result.result?.length > 0 ||
           field3Result.result?.length > 0) && (
