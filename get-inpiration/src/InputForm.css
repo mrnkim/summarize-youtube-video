@@ -1,0 +1,69 @@
+.title {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.checkboxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+.checkbox-container {
+    margin: 0;
+    padding: 0;
+  }
+
+.checkbox-container input[type="checkbox"],
+.checkbox-container label {
+    margin: 0;
+    padding: 0;
+  }
+
+.checkbox-container label {
+    margin-left: 5px;
+  }
+
+.inputForm{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 381px;
+        margin-top: 60px;
+  }
+
+.form {
+    margin-top: 5px;
+    width: 381px;
+  }
+
+.checkbox-container input[type="checkbox"] {
+    width: 12.8px;
+    height: 12.8px;
+    background-color: #FFACDE;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+    width: 12.8px;
+    height: 12.8px;
+    accent-color: #FF0099 ;
+    }
+
+.generateButton {
+    margin-top: 30px;
+    background-color: #FF0099;
+    width: 381px;
+    height: 44px;
+    top: 600px;
+    left: 529px;
+    padding: 10px 12px 10px 12px;
+    border: none;
+    font-weight: 500;
+    font-size: 16px;
+    color: white;
+}
+
+.label {
+    text-transform: capitalize;
+}

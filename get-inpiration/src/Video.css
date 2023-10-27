@@ -1,0 +1,11 @@
+.video {
+    display: flex;
+    align-items: center;
+    overflow: hidden !important;
+
+  }
+
+  .react-player {
+    width: 381px !important;
+    height: 100% !important;
+    }
