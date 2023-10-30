@@ -6,7 +6,7 @@ import { Result } from "./Result";
 import "./GetInspiration.css";
 import TwelveLabsApi from "./TwelveLabsApi";
 
-export function GetInspiration({ video, setVideo }) {
+export function GetInspiration({ video, setVideo, index, fetchVideo }) {
   const [loading, setLoading] = useState(false);
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
@@ -34,6 +34,7 @@ export function GetInspiration({ video, setVideo }) {
     result: "",
   });
   const [taskVideo, setTaskVideo] = useState(null);
+  console.log("🚀 > GetInspiration > taskVideo=", taskVideo);
 
   function generate(data) {
     return TwelveLabsApi.generateSummary(data, video.data._id);
@@ -54,7 +55,13 @@ export function GetInspiration({ video, setVideo }) {
     <div className="getInspiration">
       <h1 className="appTitle">Summarize a Youtube Video</h1>
       <div className="videoUrlUploadForm">
-        <VideoUrlUploadForm setVideo={setVideo} setTaskVideo={setTaskVideo} />
+        <VideoUrlUploadForm
+          setVideo={setVideo}
+          setTaskVideo={setTaskVideo}
+          taskVideo={taskVideo}
+          index={index}
+          fetchVideo={fetchVideo}
+        />
       </div>
       {video.data && !taskVideo && <Video url={video?.data?.hls.video_url} />}
       {!video.data && !taskVideo && <p>Please Upload a video</p>}
