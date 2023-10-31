@@ -9,6 +9,8 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 15px;
+
 }
 
 .videoUrlUploadInput, .videoUrlUploadButton {
@@ -34,5 +36,16 @@
     background-color:
     #F4F4F3;
     border: none;
+}
 
+.errorMessage {
+    color: var(--TL-Red-500, #F44336);
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.25rem; /* 142.857% */
+}
+
+.videoAndStatus {
+    text-transform: capitalize;
 }

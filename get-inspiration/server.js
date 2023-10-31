@@ -68,7 +68,6 @@ const indexVideo = async (videoPath, indexId) => {
   };
 
   const response = await TWELVE_LABS_API.post("/tasks", params, headers);
-  console.log("🚀 > indexVideo > response=", response)
   return await response.data;
 };
 
@@ -111,7 +110,6 @@ app.post(
         videoPath,
         request.body.index
       );
-      console.log("🚀 > indexVideoResponse=", indexVideoResponse)
 
       console.log("Indexing Submission Completed");
       await new Promise((resolve) => setTimeout(resolve, 1000));

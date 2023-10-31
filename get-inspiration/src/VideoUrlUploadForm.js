@@ -8,17 +8,15 @@ const VIDEO_INFO_URL = new URL("/video-info", SERVER_BASE_URL);
 const DOWNLOAD_URL = new URL("/download", SERVER_BASE_URL);
 
 export function VideoUrlUploadForm({
-  setVideo,
   setTaskVideo,
   taskVideo,
   index,
   fetchVideo,
 }) {
+  console.log("🚀 >   taskVideo=", taskVideo);
   const [videoUrl, setVideoUrl] = useState(null);
-  const [taskStatusPromise, setTaskStatusPromise] = useState(null);
-  console.log("🚀 > taskStatusPromise=", taskStatusPromise)
   const [taskStatus, setTaskStatus] = useState(null);
-  console.log("🚀 > taskStatus=", taskStatus)
+  console.log("🚀 > taskStatus=", taskStatus);
   const [error, setError] = useState(null);
 
   function handleChange(evt) {
@@ -36,53 +34,69 @@ export function VideoUrlUploadForm({
     return await response.json();
   }
 
-  const indexYouTubeVideo = async () => {
-    const videoData = {
-      url: taskVideo.video_url,
-      title: taskVideo.title,
-      authorName: taskVideo.author.name,
-    };
+  async function indexYouTubeVideo() {
+    console.log("indexYouTubeVideo called");
 
-    const requestData = {
-      videoData: videoData,
-      index: index,
-    };
+    if (taskVideo) {
+      try {
+        const requestData = {
+          videoData: {
+            url: taskVideo.video_url,
+            title: taskVideo.title,
+            authorName: taskVideo.author.name,
+          },
+          index: index,
+        };
 
-    const data = {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    };
+        const data = {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        };
 
-    const response = await fetch(DOWNLOAD_URL.toString(), data);
-    console.log("🚀 > indexYouTubeVideo > response=", response);
-    const json = await response.json();
-    const taskId = json.taskId;
-    const promise = await monitorTaskId(taskId);
-    setTaskStatusPromise(promise);
-
-  };
+        const response = await fetch(DOWNLOAD_URL.toString(), data);
+        console.log("🚀 > indexYouTubeVideo > response=", response);
+        const jsonResponse = await response.json();
+        const taskId = jsonResponse.taskId;
+        monitorTaskId(taskId);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  }
 
   async function monitorTaskId(taskId) {
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    let poll = true;
+    if (taskId) {
+      try {
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        let isMonitoring = true;
 
-    while (poll) {
-      const status = await TwelveLabsApi.checkStatus(taskId._id);
-      setTaskStatus(status.status);
-      console.log("🚀 > monitorTaskId > status=", status)
-      console.log("🚀 > taskStatus=", taskStatus)
+        while (isMonitoring) {
+          const taskStatusResponse = await TwelveLabsApi.checkStatus(
+            taskId._id
+          );
+          console.log(
+            "🚀 > monitorTaskId > taskStatusResponse=",
+            taskStatusResponse
+          );
 
-
-
-      if (status.status === "ready") {
-        poll = false;
-        fetchVideo();
-      } else {
-        await sleep(10000);
+          setTaskStatus(taskStatusResponse.status);
+          if (
+            taskStatusResponse.status === "ready" ||
+            taskStatusResponse.status === "failed"
+          ) {
+            setTaskVideo(null);
+            isMonitoring = false;
+            fetchVideo();
+          } else {
+            await sleep(10000);
+          }
+        }
+      } catch (error) {
+        setError(error.message);
       }
     }
   }
@@ -91,22 +105,27 @@ export function VideoUrlUploadForm({
     evt.preventDefault();
     const videoInfo = await getVideoInfo(videoUrl);
     setTaskVideo(videoInfo);
-  }
+  };
 
-    useEffect(() => {
-      if (taskVideo) {
-        indexYouTubeVideo();
-      }
-    }, [taskVideo]);
+  useEffect(() => {
+    if (taskVideo) {
+      indexYouTubeVideo();
+    }
+  }, [taskVideo]);
 
-   return (
+  return (
     <div className="videoUrlUploadForm">
       <div className="title">Upload video</div>
       <form onChange={handleChange} onSubmit={handleSubmit}>
         <input className="videoUrlUploadInput"></input>
         <button className="videoUrlUploadButton">Upload</button>
       </form>
-      <div>{taskStatus ? taskStatus.status : 'Loading...'}</div>
+      {taskVideo && (
+        <div className="videoAndStatus">
+          <Video url={taskVideo.video_url} />
+          {taskStatus ? `${taskStatus}...` : "Submitting..."}
+        </div>
+      )}
       {error && <div className="errorMessage">{error}</div>}
     </div>
   );
