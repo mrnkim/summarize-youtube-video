@@ -16,23 +16,24 @@ This app's got your back when you need a speedy text summary of any video in you
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 - [React](https://react.dev/)
 - [React Player](https://www.npmjs.com/package/react-player)
+- [ytdl-core](https://www.npmjs.com/package/ytdl-core)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 🔑 Getting Started
 
-### Step 1. Clone the repo and cd to the right folder
+### Step 1. Clone the repo and move to the right folder
 
-1. Clone the current repo
+1. Clone the current repository
    ```sh
    git clone git@github.com:mrnkim/Summarize-a-Youtube-Video.git
    ```
-2. cd into summarize-video folder
+2. cd into the summarize-video folder
    ```sh
       cd summarize-video/
    ```
 
-### Step 2. Generate API Key & Create an Index
+### Step 2. Generate API Key and create an Index
 
 1. Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate your API Key
    - Once you sign up, you'll receive complimentary credits allowing you to index up to 10 hours of video content!
