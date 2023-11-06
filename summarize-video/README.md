@@ -4,7 +4,6 @@
 
 ## 👋 Introduction
 
-
 This app's got your back when you need a speedy text summary of any video in your sights. Whether you're a content creator gearing up to make your own video, or simply looking to dissect a benchmark video, this app helps you swiftly capture the essence, structure, and key highlights. It's your shortcut to finding those standout elements to make your content shine!
 
 <div style="border: 1px solid black;">
@@ -22,13 +21,24 @@ This app's got your back when you need a speedy text summary of any video in you
 
 ## 🔑 Getting Started
 
-### Step 1. Generate API Key & Create an Index
+### Step 1. Clone the repo and cd to the right folder
+
+1. Clone the current repo
+   ```sh
+   git clone git@github.com:mrnkim/Summarize-a-Youtube-Video.git
+   ```
+2. cd into summarize-video folder
+   ```sh
+      cd summarize-video/
+   ```
+
+### Step 2. Generate API Key & Create an Index
 
 1. Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate your API Key
    - Once you sign up, you'll receive complimentary credits allowing you to index up to 10 hours of video content!
 2. Check the current API Base URL at [Twelve Labs API Reference](https://docs.twelvelabs.io/reference/api-reference) and update the version as needed
 3. Create an index and save the index id (Visit [Twelve Labs Docs](https://docs.twelvelabs.io/docs/create-indexes) for details)
-4. Create `.env` file and store/update the values of API_URL, API_KEY, and INDEX_ID.
+4. Create `.env` file at the root level and store/update the values of API_URL, API_KEY, and INDEX_ID.
 
    ```
 
@@ -40,13 +50,15 @@ This app's got your back when you need a speedy text summary of any video in you
 
    ```
 
-### Step 2. Start the App
+### Step 3. Start the server and the client
 
-1. Clone the current repo
+1. Start the server
+
    ```sh
-   git clone git@github.com:mrnkim/Summarize-a-Youtube-Video.git
+   nodemon server.js
    ```
-2. Install and start the client
+
+1. Install and start the client
 
    ```sh
    npm install
@@ -57,7 +69,6 @@ This app's got your back when you need a speedy text summary of any video in you
 
 ## 🎯 What's Next?
 
-- Implement Video Uplaod feature
 - Add (or automate) test
 - Improve error handling and add data validations
 
