@@ -25,7 +25,7 @@ This app's got your back when you need a speedy text summary of any video in you
 ### Step 1. Clone the repo
 
 ```sh
-git clone git@github.com:mrnkim/Summarize-Youtube-Video.git
+git clone git@github.com:mrnkim/summarize-youtube-video.git
 ```
 
 ### Step 2. Generate API Key and create an Index
