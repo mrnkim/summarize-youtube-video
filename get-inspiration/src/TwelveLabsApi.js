@@ -79,7 +79,6 @@ class TwelveLabsApi {
       headers: this.headers,
       data: data,
     };
-    console.log("🚀 > TwelveLabsApi > generateSummary > config=", config);
 
     try {
       const response = await axios.request(config);

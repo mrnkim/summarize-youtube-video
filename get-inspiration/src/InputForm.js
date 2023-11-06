@@ -1,6 +1,11 @@
 import { React } from "react";
 import "./InputForm.css";
 
+/** Receive user's check prompt for the API call
+ *
+ * App -> SummarizeVideo -> {InputForm}
+ *
+ */
 export function InputForm({
   field1Prompt,
   setField1Prompt,
@@ -18,6 +23,7 @@ export function InputForm({
   setLoading,
   loading,
 }) {
+  /** Toggle check for each prompt */
   function handleCheck(promptType) {
     switch (promptType) {
       case field1:
@@ -44,6 +50,7 @@ export function InputForm({
     setLoading(false);
   }
 
+  /** Combine user input and make API call(s)  */
   async function handleClick(event) {
     reset();
     event.preventDefault();
@@ -96,6 +103,7 @@ export function InputForm({
     }
   }
 
+  /** Empty result(s) */
   function reset() {
     setField1Result({
       fieldName: field1,

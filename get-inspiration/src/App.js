@@ -1,18 +1,24 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 
-import { GetInspiration } from "./GetInspiration";
+import { SummarizeVideo } from "./SummarizeVideo";
 import TwelveLabsApi from "./TwelveLabsApi";
+
+/** Summarize a Video App
+ *
+ * App -> SummarizeVideo
+ *
+ */
 
 function App() {
   const [video, setVideo] = useState({ data: null, isLoading: true });
-  console.log("🚀 > App > video=", video);
   const INDEX_ID = process.env.REACT_APP_INDEX_ID;
 
   useEffect(function fetchVideoOnMount() {
     fetchVideo();
   }, []);
 
+  /** Fetch the first video of a given index */
   async function fetchVideo() {
     try {
       const response = await TwelveLabsApi.getFirstVideo(INDEX_ID);
@@ -35,7 +41,7 @@ function App() {
 
   return (
     <div className="app">
-      <GetInspiration video={video} index={INDEX_ID} fetchVideo={fetchVideo} />
+      <SummarizeVideo video={video} index={INDEX_ID} fetchVideo={fetchVideo} />
     </div>
   );
 }

@@ -3,10 +3,16 @@ import { Video } from "./Video";
 import { InputForm } from "./InputForm";
 import { VideoUrlUploadForm } from "./VideoUrlUploadForm";
 import { Result } from "./Result";
-import "./GetInspiration.css";
+import "./SummarizeVideo.css";
 import TwelveLabsApi from "./TwelveLabsApi";
 
-export function GetInspiration({ video, setVideo, index, fetchVideo }) {
+/** Summarize a Video App
+ *
+ * App -> SummarizeVideo -> {VideoUrlUploadForm, Video, InputForm, Result}
+ *
+ */
+
+export function SummarizeVideo({ video, setVideo, index, fetchVideo }) {
   const [loading, setLoading] = useState(false);
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
@@ -35,6 +41,7 @@ export function GetInspiration({ video, setVideo, index, fetchVideo }) {
   });
   const [taskVideo, setTaskVideo] = useState(null);
 
+  /** Make API call to generate summary, chapters, and highlights of a video  */
   function generate(data) {
     return TwelveLabsApi.generateSummary(data, video.data._id);
   }
@@ -42,6 +49,7 @@ export function GetInspiration({ video, setVideo, index, fetchVideo }) {
   const vidTitleRaw = video?.data?.metadata.video_title;
   const vidTitleClean = decodeAndCleanFilename(vidTitleRaw);
 
+  /** Return clean video file name  */
   function decodeAndCleanFilename(filename) {
     const decodedFilename = decodeURIComponent(filename);
     const cleanedFilename = decodedFilename
@@ -51,7 +59,7 @@ export function GetInspiration({ video, setVideo, index, fetchVideo }) {
   }
 
   return (
-    <div className="getInspiration">
+    <div className="summarizeVideo">
       <h1 className="appTitle">Summarize a Youtube Video</h1>
       <div className="videoUrlUploadForm">
         <VideoUrlUploadForm
