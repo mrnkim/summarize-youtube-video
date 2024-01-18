@@ -1,5 +1,8 @@
+import { React, useState, useEffect } from "react";
 import { TitleAndSummary } from "./TitleAndSummary";
 import { Video } from "./Video";
+import TwelveLabsApi from "./TwelveLabsApi";
+import LoadingSpinner from "./LoadingSpinner";
 import "./Result.css";
 
 /** Shows the results
@@ -8,7 +11,78 @@ import "./Result.css";
  *
  */
 
-export function Result({ video, field1Result, field2Result, field3Result }) {
+export function Result({
+  video,
+  setIsSubmitted,
+  isSubmitted,
+  field1Prompt,
+  field2Prompt,
+  field3Prompt,
+  setResultLoading,
+  resultLoading,
+}) {
+  const [field1Result, setField1Result] = useState({});
+  const [field2Result, setField2Result] = useState({});
+  const [field3Result, setField3Result] = useState({});
+  /** Make API call to generate summary, chapters, and highlights of a video  */
+  function generate(data) {
+    return TwelveLabsApi.generateSummary(data, video.data._id);
+  }
+
+  async function fetchData() {
+    reset();
+    try {
+      if (field1Prompt.type && field1Prompt.isChecked) {
+        const response = await generate(field1Prompt);
+        setField1Result({
+          fieldName: field1Prompt.type,
+          result: response?.summary,
+        });
+      }
+
+      if (field2Prompt.type && field2Prompt.isChecked) {
+        const response = await generate(field2Prompt);
+        setField2Result({
+          fieldName: field2Prompt.type,
+          result: response?.chapters,
+        });
+      }
+
+      if (field3Prompt.type && field3Prompt.isChecked) {
+        const response = await generate(field3Prompt);
+        setField3Result({
+          fieldName: field3Prompt.type,
+          result: response?.highlights,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setResultLoading(false);
+      setIsSubmitted(false);
+    }
+  }
+
+  /** Empty result(s) */
+  async function reset() {
+    setField1Result({
+      fieldName: null,
+      result: "",
+    });
+    setField2Result({
+      fieldName: null,
+      result: "",
+    });
+    setField3Result({
+      fieldName: null,
+      result: "",
+    });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [isSubmitted]);
+
   /** Format seconds to hours:minutes:seconds */
   function formatTime(timeInSeconds) {
     const hours = Math.floor(timeInSeconds / 3600);
@@ -22,14 +96,16 @@ export function Result({ video, field1Result, field2Result, field3Result }) {
   }
   return (
     <div className="result">
-      {field1Result.result?.length > 0 && (
+      {resultLoading && <LoadingSpinner />}
+
+      {!resultLoading && field1Result.result?.length > 0 && (
         <div className="resultSection">
           <h2>Sentences</h2>
           <div>{field1Result.result}</div>
         </div>
       )}
 
-      {field2Result.result?.length > 0 && (
+      {!resultLoading && field2Result.result?.length > 0 && (
         <div className="resultSection">
           <h2>Chapters</h2>
           <div>
@@ -65,7 +141,7 @@ export function Result({ video, field1Result, field2Result, field3Result }) {
         </div>
       )}
 
-      {field3Result.result?.length > 0 && (
+      {!resultLoading && field3Result.result?.length > 0 && (
         <div className="resultSection">
           <h2>Highlights</h2>
           <div>

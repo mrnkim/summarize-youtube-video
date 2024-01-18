@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-
+import LoadingSpinner from "./LoadingSpinner";
 import { SummarizeVideo } from "./SummarizeVideo";
 import TwelveLabsApi from "./TwelveLabsApi";
 
@@ -36,7 +36,7 @@ function App() {
   }
 
   if (video.isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 
   return (

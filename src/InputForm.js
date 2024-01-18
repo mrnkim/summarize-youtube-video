@@ -16,12 +16,10 @@ export function InputForm({
   field1,
   field2,
   field3,
-  generate,
-  setField1Result,
-  setField2Result,
-  setField3Result,
-  setLoading,
-  loading,
+  setIsSubmitted,
+  resultLoading,
+  setResultLoading,
+  setShowVideoTitle,
 }) {
   /** Toggle check for each prompt */
   function handleCheck(promptType) {
@@ -47,76 +45,26 @@ export function InputForm({
       default:
         break;
     }
-    setLoading(false);
   }
 
   /** Combine user input and make API call(s)  */
   async function handleClick(event) {
-    reset();
     event.preventDefault();
 
-    const field1Data = {};
-    const field2Data = {};
-    const field3Data = {};
-
     if (field1Prompt.isChecked) {
-      field1Data["type"] = field1;
+      field1Prompt["type"] = field1;
     }
 
     if (field2Prompt.isChecked) {
-      field2Data["type"] = field2;
+      field2Prompt["type"] = field2;
     }
 
     if (field3Prompt.isChecked) {
-      field3Data["type"] = field3;
+      field3Prompt["type"] = field3;
     }
-
-    setLoading(true);
-
-    try {
-      // Make the summary API call
-      if (field1Data["type"]) {
-        const summaryResponse = await generate(field1Data);
-        setField1Result((prevField1Result) => ({
-          ...prevField1Result,
-          result: summaryResponse?.summary,
-        }));
-      }
-      // Make the chapter API call
-      if (field2Data["type"]) {
-        const chapterResponse = await generate(field2Data);
-        setField2Result((prevField2Result) => ({
-          ...prevField2Result,
-          result: chapterResponse?.chapters,
-        }));
-      }
-      // Make the highlight API call
-      if (field3Data["type"]) {
-        const highlightResponse = await generate(field3Data);
-        setField3Result((prevField3Result) => ({
-          ...prevField3Result,
-          result: highlightResponse?.highlights,
-        }));
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  /** Empty result(s) */
-  function reset() {
-    setField1Result({
-      fieldName: field1,
-      result: "",
-    });
-    setField2Result({
-      fieldName: field2,
-      result: "",
-    });
-    setField3Result({
-      fieldName: field3,
-      result: "",
-    });
+    setIsSubmitted(true);
+    setResultLoading(true);
+    setShowVideoTitle(true);
   }
 
   return (
@@ -164,7 +112,12 @@ export function InputForm({
         <button
           className="generateButton"
           onClick={handleClick}
-          disabled={loading}
+          disabled={
+            resultLoading ||
+            (!field1Prompt.isChecked &&
+              !field2Prompt.isChecked &&
+              !field3Prompt.isChecked)
+          }
         >
           Generate
         </button>{" "}
