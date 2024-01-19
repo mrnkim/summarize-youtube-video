@@ -24,7 +24,6 @@ export function SummarizeVideo({ video, setVideo, index, fetchVideo }) {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
-  console.log("🚀 > SummarizeVideo > showVideoTitle=", showVideoTitle);
   const [resultLoading, setResultLoading] = useState(false);
 
   const [taskVideo, setTaskVideo] = useState(null);

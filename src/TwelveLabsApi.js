@@ -110,6 +110,7 @@ class TwelveLabsApi {
 
   /** Checks status of a task (e.g., video upload task) */
   static async checkStatus(taskId) {
+    console.log("🚀 > TwelveLabsApi > checkStatus > taskId=", taskId)
     const config = {
       method: "GET",
       url: `${API_URL}/tasks/${taskId}`,

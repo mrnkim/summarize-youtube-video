@@ -3,10 +3,11 @@ import { useState, useEffect } from "react";
 import { Video } from "./Video";
 import TwelveLabsApi from "./TwelveLabsApi";
 import LoadingSpinner from "./LoadingSpinner.svg";
+import axios from "axios";
 
 const SERVER_BASE_URL = new URL("http://localhost:4002");
 const VIDEO_INFO_URL = new URL("/video-info", SERVER_BASE_URL);
-const DOWNLOAD_URL = new URL("/download", SERVER_BASE_URL);
+const INDEX_VIDEO = new URL("/index", SERVER_BASE_URL);
 
 /** Receive user's video file, submit it to API, and show task status
  *
@@ -41,31 +42,22 @@ export function VideoUrlUploadForm({
     return await response.json();
   }
 
-  /** Download and submit a video for indexting  */
+  /** Submit a Youtbue video url for indexing  */
   async function indexYouTubeVideo() {
     if (taskVideo) {
       try {
-        const requestData = {
-          videoData: {
-            url: taskVideo.video_url,
-            title: taskVideo.title,
-            authorName: taskVideo.author.name,
-          },
-          index: index,
-        };
-
-        const data = {
+        const data = JSON.stringify({
+          index_id: index,
+          url: taskVideo.video_url,
+        });
+        const response = await axios.post(INDEX_VIDEO.toString(), {
           method: "POST",
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            "content-type": "application/json",
           },
-          body: JSON.stringify(requestData),
-        };
-
-        const response = await fetch(DOWNLOAD_URL.toString(), data);
-        const jsonResponse = await response.json();
-        const taskId = jsonResponse.taskId;
+          body: data,
+        });
+        const taskId = response.data._id;
         monitorTaskId(taskId);
       } catch (error) {
         setError(error.message);
@@ -82,7 +74,7 @@ export function VideoUrlUploadForm({
 
         while (isMonitoring) {
           const taskStatusResponse = await TwelveLabsApi.checkStatus(
-            taskId._id
+            taskId
           );
 
           setTaskStatus(taskStatusResponse.status);
