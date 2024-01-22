@@ -1,9 +1,11 @@
 import { React, useState, useEffect } from "react";
 import { TitleAndSummary } from "./TitleAndSummary";
 import { Video } from "./Video";
+import { useQueryClient } from "@tanstack/react-query";
 import TwelveLabsApi from "./TwelveLabsApi";
 import LoadingSpinner from "./LoadingSpinner";
 import "./Result.css";
+import { fetchGenerateSummary } from "./apiHooks";
 
 /** Shows the results
  *
@@ -21,21 +23,32 @@ export function Result({
   setResultLoading,
   resultLoading,
 }) {
+  console.log("🚀 > video=", video);
+  console.log("🚀 >  isSubmitted=", isSubmitted);
+  console.log("🚀 > field1Prompt=", field1Prompt);
   const [field1Result, setField1Result] = useState({});
   const [field2Result, setField2Result] = useState({});
   const [field3Result, setField3Result] = useState({});
   /** Make API call to generate summary, chapters, and highlights of a video  */
-  function generate(data) {
-    return TwelveLabsApi.generateSummary(data, video.data._id);
+  async function generate(data) {
+    console.log("🚀 > generate > data=", data);
+    const response = await fetchGenerateSummary(queryClient, data, video._id);
+    console.log("🚀 > generate > response=", response);
+    return response;
   }
+
+  const queryClient = useQueryClient();
+
+  /** Make API call to generate summary, chapters, and highlights of a video  */
 
   async function fetchData() {
     reset();
     try {
       if (field1Prompt.type && field1Prompt.isChecked) {
         const response = await generate(field1Prompt);
+        console.log("🚀 > fetchData > response=", response);
         setField1Result({
-          fieldName: field1Prompt.type,
+          fieldName: field2Prompt.type,
           result: response?.summary,
         });
       }
@@ -116,7 +129,7 @@ export function Result({
                   key={chapter.chapter_title}
                 >
                   <Video
-                    url={video?.data?.hls.video_url}
+                    url={video?.hls.video_url}
                     start={chapter.start}
                     end={chapter.end}
                   />
@@ -149,7 +162,7 @@ export function Result({
               field3Result.result.map((highlight) => (
                 <div className="videoAndDescription" key={highlight.highlight}>
                   <Video
-                    url={video?.data?.hls.video_url}
+                    url={video?.hls.video_url}
                     start={highlight.start}
                     end={highlight.end}
                   />

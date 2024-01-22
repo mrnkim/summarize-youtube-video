@@ -14,7 +14,6 @@ import { useGetVideo } from "./apiHooks";
 
 export function SummarizeVideo({ index, videoId, fetchVideo }) {
   const { data: video } = useGetVideo(index, videoId);
-  console.log("🚀 > SummarizeVideo > video=", video);
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
     isChecked: true,
@@ -31,7 +30,7 @@ export function SummarizeVideo({ index, videoId, fetchVideo }) {
 
   const [taskVideo, setTaskVideo] = useState(null);
 
-  const vidTitleRaw = video?.data?.metadata.video_title;
+  const vidTitleRaw = video?.metadata.video_title;
   const vidTitleClean = decodeAndCleanFilename(vidTitleRaw);
 
   /** Return clean video file name  */

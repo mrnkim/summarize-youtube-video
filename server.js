@@ -61,8 +61,6 @@ app.get("/indexes/:indexId/videos", async (request, response, next) => {
   const params = {
     page_limit: request.query.page_limit,
   };
-  console.log("🚀 > app.get > params=", params);
-  console.log("🚀 > app.get > API_BASE_URL=", API_BASE_URL);
 
   try {
     const apiResponse = await TWELVE_LABS_API.get(
@@ -72,7 +70,6 @@ app.get("/indexes/:indexId/videos", async (request, response, next) => {
         params,
       }
     );
-    console.log("🚀 > app.get > apiResponse=", apiResponse);
     response.json(apiResponse.data);
   } catch (error) {
     console.error("Error getting videos:", error);
@@ -105,6 +102,34 @@ app.get(
     }
   }
 );
+
+/** Summarize a video */
+app.post("/videos/:videoId/summarize", async (request, response, next) => {
+  const videoId = request.params.videoId;
+  console.log("🚀 > app.post > videoId=", videoId);
+  let data = request.body.data;
+  console.log("🚀 > app.post > data=", data);
+
+  let headers = {
+    "Content-Type": "application/json",
+    "x-api-key": TWELVE_LABS_API_KEY,
+  };
+  //TODO: update URL
+  try {
+    const options = {
+      method: "POST",
+      url: `https://api.twelvelabs.io/v1.2/summarize`,
+      headers: { ...headers, accept: "application/json" },
+      data: { ...data, video_id: videoId },
+    };
+    console.log("🚀 > app.post > options=", options);
+    const apiResponse = await axios.request(options);
+    console.log("🚀 > app.post > apiResponse.data=", apiResponse.data);
+    response.json(apiResponse.data);
+  } catch (error) {
+    return next(error);
+  }
+});
 
 /** Get JSON-formatted video information from a YouTube URL using ytdl */
 app.get("/video-info", async (request, response, next) => {

@@ -6,7 +6,7 @@ const SERVER_BASE_URL = new URL(
 
 const apiConfig = {
   PAGE_LIMIT: 1,
-  TWELVE_LABS_API: axios.create({
+  SERVER: axios.create({
     baseURL: SERVER_BASE_URL.toString(),
   }),
   INDEXES_URL: "/indexes",

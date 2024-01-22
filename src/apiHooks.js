@@ -12,7 +12,7 @@ export function useGetIndexes(page, pageLimit) {
   return useQuery({
     queryKey: [keys.INDEXES, page],
     queryFn: () =>
-      apiConfig.TWELVE_LABS_API.get(
+      apiConfig.SERVER.get(
         `${apiConfig.INDEXES_URL}?page=${page}&page_limit=${pageLimit}`
       ).then((res) => res.data),
   });
@@ -22,7 +22,7 @@ export function useGetIndex(indexId) {
   return useQuery({
     queryKey: [keys.INDEX, indexId],
     queryFn: async () => {
-      const response = await apiConfig.TWELVE_LABS_API.get(
+      const response = await apiConfig.SERVER.get(
         `${apiConfig.INDEXES_URL}/${indexId}`
       );
       if (response.data.error) {
@@ -37,7 +37,7 @@ export function useCreateIndex(setIndexId) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (indexName) =>
-      apiConfig.TWELVE_LABS_API.post(apiConfig.INDEXES_URL, { indexName }).then(
+      apiConfig.SERVER.post(apiConfig.INDEXES_URL, { indexName }).then(
         (res) => res.data
       ),
     onSuccess: (newIndex) => {
@@ -51,7 +51,7 @@ export function useCreateIndex(setIndexId) {
 export function useDeleteIndex(setIndexId) {
   return useMutation({
     mutationFn: (indexId) =>
-      apiConfig.TWELVE_LABS_API.delete(
+      apiConfig.SERVER.delete(
         `${apiConfig.INDEXES_URL}?indexId=${indexId}`
       ).then((res) => res.data),
     onSuccess: () => {
@@ -66,10 +66,9 @@ export function useGetVideo(indexId, videoId) {
     queryKey: [keys.VIDEOS, indexId, videoId],
     queryFn: async () => {
       try {
-        const response = await apiConfig.TWELVE_LABS_API.get(
+        const response = await apiConfig.SERVER.get(
           `${apiConfig.INDEXES_URL}/${indexId}/videos/${videoId}`
         );
-        console.log("🚀 > queryFn: > response=", response.data);
         return response.data;
       } catch (error) {
         throw error.response?.data || error;
@@ -82,13 +81,12 @@ export function useGetVideos(indexId) {
     queryKey: [keys.VIDEOS, indexId],
     queryFn: async () => {
       try {
-        const response = await apiConfig.TWELVE_LABS_API.get(
+        const response = await apiConfig.SERVER.get(
           `${apiConfig.INDEXES_URL}/${indexId}/videos`,
           {
             params: { page_limit: apiConfig.PAGE_LIMIT },
           }
         );
-        console.log("🚀 > queryFn: > response=", response.data);
         return response.data;
       } catch (error) {
         throw error.response?.data || error;
@@ -96,14 +94,34 @@ export function useGetVideos(indexId) {
     },
   });
 }
+export async function fetchGenerateSummary(queryClient, data, videoId) {
+  try {
+    const response = await queryClient.fetchQuery({
+      queryKey: [keys.VIDEOS, "summarize", videoId],
+      queryFn: async () => {
+        const response = await apiConfig.SERVER.post(
+          `/videos/${videoId}/summarize`,
+          { data: data }
+        );
+        console.log("🚀 > queryFn: > response=", response);
+        const respData = response.data;
+        return respData;
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching next page of search results:", error);
+    throw error;
+  }
+}
 
 export function useGetAllAuthors(indexId) {
   return useQuery({
     queryKey: [keys.AUTHORS, indexId],
     queryFn: () =>
-      apiConfig.TWELVE_LABS_API.get(
-        `${apiConfig.INDEXES_URL}/${indexId}/authors`
-      ).then((res) => res.data),
+      apiConfig.SERVER.get(`${apiConfig.INDEXES_URL}/${indexId}/authors`).then(
+        (res) => res.data
+      ),
   });
 }
 
@@ -111,7 +129,7 @@ export function useSearchVideo(indexId, query) {
   return useQuery({
     queryKey: [keys.SEARCH, indexId, query],
     queryFn: () =>
-      apiConfig.TWELVE_LABS_API.post(apiConfig.SEARCH_URL, {
+      apiConfig.SERVER.post(apiConfig.SEARCH_URL, {
         indexId,
         query,
       }).then((res) => res.data),
@@ -122,29 +140,29 @@ export function useGetSearchResults(indexId, pageToken) {
   return useInfiniteQuery({
     queryKey: [keys.SEARCH, pageToken],
     queryFn: () =>
-      apiConfig.TWELVE_LABS_API.get(
-        `${apiConfig.SEARCH_URL}/${pageToken}`
-      ).then(async (res) => {
-        const searchData = res.data;
+      apiConfig.SERVER.get(`${apiConfig.SEARCH_URL}/${pageToken}`).then(
+        async (res) => {
+          const searchData = res.data;
 
-        // Fetch videos for each search result
-        const videosPromises = searchData.data.map(async (searchResult) => {
-          const videoResponse = await apiConfig.TWELVE_LABS_API.get(
-            `${apiConfig.INDEXES_URL}/${indexId}/videos/${searchResult.id}`
-          );
-          return videoResponse.data;
-        });
+          // Fetch videos for each search result
+          const videosPromises = searchData.data.map(async (searchResult) => {
+            const videoResponse = await apiConfig.SERVER.get(
+              `${apiConfig.INDEXES_URL}/${indexId}/videos/${searchResult.id}`
+            );
+            return videoResponse.data;
+          });
 
-        // Wait for all video requests to complete
-        const videos = await Promise.all(videosPromises);
+          // Wait for all video requests to complete
+          const videos = await Promise.all(videosPromises);
 
-        // Attach videos to the search result data
-        const searchDataWithVideos = {
-          ...searchData,
-          videos: videos,
-        };
-        return searchDataWithVideos;
-      }),
+          // Attach videos to the search result data
+          const searchDataWithVideos = {
+            ...searchData,
+            videos: videos,
+          };
+          return searchDataWithVideos;
+        }
+      ),
     getNextPageParam: (lastPage) => {
       const nextPageToken = lastPage.page_info.next_page_token || undefined;
       return nextPageToken || null;
@@ -156,7 +174,7 @@ export function useGetTask(taskId) {
   return useQuery({
     queryKey: [keys.TASK, taskId],
     queryFn: () =>
-      apiConfig.TWELVE_LABS_API.get(`${apiConfig.TASKS_URL}/${taskId}`).then(
+      apiConfig.SERVER.get(`${apiConfig.TASKS_URL}/${taskId}`).then(
         (res) => res.data
       ),
     refetchInterval: (data) => {
@@ -178,7 +196,7 @@ export function useGetVideosOfSearchResults(indexId, query) {
     queries: initialSearchResults.map((searchResult) => ({
       queryKey: [keys.SEARCH, indexId, searchResult.id],
       queryFn: () =>
-        apiConfig.TWELVE_LABS_API.get(
+        apiConfig.SERVER.get(
           `${apiConfig.INDEXES_URL}/${indexId}/videos/${searchResult.id}`
         ).then((res) => res.data),
     })),
@@ -198,7 +216,7 @@ export async function fetchNextPageSearchResults(queryClient, nextPageToken) {
     const response = await queryClient.fetchQuery({
       queryKey: [keys.SEARCH, nextPageToken],
       queryFn: async () => {
-        const response = await apiConfig.TWELVE_LABS_API.get(
+        const response = await apiConfig.SERVER.get(
           `${apiConfig.SEARCH_URL}/${nextPageToken}`
         );
         const data = response.data;
@@ -221,7 +239,7 @@ export async function fetchNextPageSearchResultVideos(
     const response = await queryClient.fetchQuery({
       queryKey: [keys.VIDEOS, currIndex, nextPageResultId],
       queryFn: async () => {
-        const response = await apiConfig.TWELVE_LABS_API.get(
+        const response = await apiConfig.SERVER.get(
           `${apiConfig.INDEXES_URL}/${currIndex}/videos/${nextPageResultId}`
         );
         const data = response.data;
