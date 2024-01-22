@@ -42,7 +42,7 @@ export function VideoUrlUploadForm({
     return await response.json();
   }
 
-  /** Submit a Youtbue video url for indexing  */
+  /** Submit a Youtube video url for indexing  */
   async function indexYouTubeVideo() {
     if (taskVideo) {
       try {

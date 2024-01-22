@@ -11,6 +11,10 @@ const axios = require("axios");
 /** Define constants and configure TL API endpoints */
 const TWELVE_LABS_API_KEY = process.env.REACT_APP_API_KEY;
 const API_BASE_URL = process.env.REACT_APP_API_URL;
+const TWELVE_LABS_API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+const PORT_NUMBER = process.env.REACT_APP_PORT_NUMBER;
 
 /** Set up middleware for Express */
 app.use(cors());
@@ -43,9 +47,64 @@ process.on("uncaughtException", function (exception) {
 });
 
 /** Set up Express server to listen on port 4002 */
-app.listen(4002, () => {
-  console.log("Server Running. Listening on port 4002");
+app.listen(PORT_NUMBER, () => {
+  console.log(`Server Running. Listening on port ${PORT_NUMBER}`);
 });
+
+/** Get videos */
+app.get("/indexes/:indexId/videos", async (request, response, next) => {
+  const headers = {
+    "Content-Type": "application/json",
+    "x-api-key": TWELVE_LABS_API_KEY,
+  };
+
+  const params = {
+    page_limit: request.query.page_limit,
+  };
+  console.log("🚀 > app.get > params=", params);
+  console.log("🚀 > app.get > API_BASE_URL=", API_BASE_URL);
+
+  try {
+    const apiResponse = await TWELVE_LABS_API.get(
+      `/indexes/${request.params.indexId}/videos`,
+      {
+        headers,
+        params,
+      }
+    );
+    console.log("🚀 > app.get > apiResponse=", apiResponse);
+    response.json(apiResponse.data);
+  } catch (error) {
+    console.error("Error getting videos:", error);
+    response.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+/** Get a video of an index */
+app.get(
+  "/indexes/:indexId/videos/:videoId",
+  async (request, response, next) => {
+    const indexId = request.params.indexId;
+    const videoId = request.params.videoId;
+
+    const headers = {
+      "Content-Type": "application/json",
+      "x-api-key": TWELVE_LABS_API_KEY,
+    };
+
+    try {
+      const apiResponse = await TWELVE_LABS_API.get(
+        `/indexes/${indexId}/videos/${videoId}`,
+        {
+          headers,
+        }
+      );
+      response.json(apiResponse.data);
+    } catch (error) {
+      return next(error);
+    }
+  }
+);
 
 /** Get JSON-formatted video information from a YouTube URL using ytdl */
 app.get("/video-info", async (request, response, next) => {

@@ -4,6 +4,7 @@ import { InputForm } from "./InputForm";
 import { VideoUrlUploadForm } from "./VideoUrlUploadForm";
 import { Result } from "./Result";
 import "./SummarizeVideo.css";
+import { useGetVideo } from "./apiHooks";
 
 /** Summarize a Video App
  *
@@ -11,7 +12,9 @@ import "./SummarizeVideo.css";
  *
  */
 
-export function SummarizeVideo({ video, setVideo, index, fetchVideo }) {
+export function SummarizeVideo({ index, videoId, fetchVideo }) {
+  const { data: video } = useGetVideo(index, videoId);
+  console.log("🚀 > SummarizeVideo > video=", video);
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
     isChecked: true,
@@ -51,8 +54,8 @@ export function SummarizeVideo({ video, setVideo, index, fetchVideo }) {
           fetchVideo={fetchVideo}
         />
       </div>
-      {video.data && !taskVideo && <Video url={video?.data?.hls.video_url} />}
-      {!video.data && !taskVideo && <p>Please Upload a video</p>}
+      {video && !taskVideo && <Video url={video?.hls.video_url} />}
+      {!video && !taskVideo && <p>Please Upload a video</p>}
       {showVideoTitle && <div className="videoTitle">{vidTitleClean}</div>}
       {!taskVideo && (
         <InputForm
