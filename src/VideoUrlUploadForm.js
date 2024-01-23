@@ -4,8 +4,12 @@ import { Video } from "./Video";
 import TwelveLabsApi from "./TwelveLabsApi";
 import LoadingSpinner from "./LoadingSpinner.svg";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
+import { fetchVideoInfo } from "./apiHooks";
 
-const SERVER_BASE_URL = new URL("http://localhost:4002");
+const SERVER_BASE_URL = new URL(
+  `${process.env.REACT_APP_SERVER_URL}:${process.env.REACT_APP_PORT_NUMBER}`
+);
 const VIDEO_INFO_URL = new URL("/video-info", SERVER_BASE_URL);
 const INDEX_VIDEO = new URL("/index", SERVER_BASE_URL);
 
@@ -19,15 +23,21 @@ export function VideoUrlUploadForm({
   setTaskVideo,
   taskVideo,
   index,
-  fetchVideo,
+  refetchVideos,
+  refetchVideo,
 }) {
+  console.log("🚀 >  taskVideo=", taskVideo);
   const [videoUrl, setVideoUrl] = useState(null);
   const [taskStatus, setTaskStatus] = useState(null);
   const [error, setError] = useState(null);
 
+  const queryClient = useQueryClient();
+
   /** Update user input (video Url) in real-time */
   function handleChange(evt) {
     const input = evt.target;
+    console.log("🚀 > handleChange > evt=", evt);
+    console.log("🚀 > handleChange > input.value=", input.value);
     setVideoUrl(input.value);
     if (error && input?.value.trim() !== "") {
       setError("");
@@ -36,10 +46,13 @@ export function VideoUrlUploadForm({
 
   /** Get information of a video  */
   async function getVideoInfo(url) {
-    const queryUrl = VIDEO_INFO_URL;
-    queryUrl.searchParams.set("URL", url);
-    const response = await fetch(queryUrl.href);
-    return await response.json();
+    // const queryUrl = VIDEO_INFO_URL;
+    // queryUrl.searchParams.set("URL", url);
+    // const response = await fetch(queryUrl.href);
+    // return await response.json();
+    const response = await fetchVideoInfo(queryClient, url);
+    console.log("🚀 > getVideoInfo > response=", response);
+    return response;
   }
 
   /** Submit a Youtube video url for indexing  */
@@ -50,8 +63,8 @@ export function VideoUrlUploadForm({
           index_id: index,
           url: taskVideo.video_url,
         });
+        console.log("🚀 > indexYouTubeVideo > data=", data);
         const response = await axios.post(INDEX_VIDEO.toString(), {
-          method: "POST",
           headers: {
             "content-type": "application/json",
           },
@@ -73,9 +86,7 @@ export function VideoUrlUploadForm({
         let isMonitoring = true;
 
         while (isMonitoring) {
-          const taskStatusResponse = await TwelveLabsApi.checkStatus(
-            taskId
-          );
+          const taskStatusResponse = await TwelveLabsApi.checkStatus(taskId);
 
           setTaskStatus(taskStatusResponse.status);
           if (
@@ -85,7 +96,8 @@ export function VideoUrlUploadForm({
             isMonitoring = false;
             setTaskVideo(null);
             setVideoUrl(null);
-            fetchVideo();
+            refetchVideos();
+            refetchVideo();
           } else {
             await sleep(10000);
           }

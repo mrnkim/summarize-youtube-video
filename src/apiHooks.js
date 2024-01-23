@@ -61,21 +61,6 @@ export function useDeleteIndex(setIndexId) {
   });
 }
 
-export function useGetVideo(indexId, videoId) {
-  return useQuery({
-    queryKey: [keys.VIDEOS, indexId, videoId],
-    queryFn: async () => {
-      try {
-        const response = await apiConfig.SERVER.get(
-          `${apiConfig.INDEXES_URL}/${indexId}/videos/${videoId}`
-        );
-        return response.data;
-      } catch (error) {
-        throw error.response?.data || error;
-      }
-    },
-  });
-}
 export function useGetVideos(indexId) {
   return useQuery({
     queryKey: [keys.VIDEOS, indexId],
@@ -94,6 +79,44 @@ export function useGetVideos(indexId) {
     },
   });
 }
+
+export function useGetVideo(indexId, videoId) {
+  return useQuery({
+    queryKey: [keys.VIDEOS, indexId, videoId],
+    queryFn: async () => {
+      try {
+        const response = await apiConfig.SERVER.get(
+          `${apiConfig.INDEXES_URL}/${indexId}/videos/${videoId}`
+        );
+        return response.data;
+      } catch (error) {
+        throw error.response?.data || error;
+      }
+    },
+  });
+}
+
+export async function fetchVideoInfo(queryClient, url) {
+  try {
+    const response = await queryClient.fetchQuery({
+      queryKey: [keys.VIDEO, url],
+      queryFn: async () => {
+        const response = await apiConfig.SERVER.get(
+          `/video-info?url=${encodeURIComponent(url)}`
+        );
+        const respData = response.data;
+        console.log("🚀 > queryFn: > respData=", respData)
+        return respData;
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching video information:", error);
+    throw error;
+  }
+}
+
+
 export async function fetchGenerateSummary(queryClient, data, videoId) {
   try {
     const response = await queryClient.fetchQuery({
@@ -103,7 +126,6 @@ export async function fetchGenerateSummary(queryClient, data, videoId) {
           `/videos/${videoId}/summarize`,
           { data: data }
         );
-        console.log("🚀 > queryFn: > response=", response);
         const respData = response.data;
         return respData;
       },

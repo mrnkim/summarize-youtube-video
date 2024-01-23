@@ -13,14 +13,14 @@ import { useGetVideos } from "./apiHooks";
 function App() {
   const INDEX_ID = process.env.REACT_APP_INDEX_ID;
 
-  const { data, refetch } = useGetVideos(INDEX_ID);
+  const { data, refetch: refetchVideos } = useGetVideos(INDEX_ID);
 
   return (
     <div className="app">
       <SummarizeVideo
         index={INDEX_ID}
         videoId={data.data[0]["_id"] || null}
-        fetchVideo={refetch}
+        refetchVideos={refetchVideos}
       />
     </div>
   );

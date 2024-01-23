@@ -12,8 +12,9 @@ import { useGetVideo } from "./apiHooks";
  *
  */
 
-export function SummarizeVideo({ index, videoId, fetchVideo }) {
-  const { data: video } = useGetVideo(index, videoId);
+export function SummarizeVideo({ index, videoId, refetchVideos }) {
+  const { data: video, refetch: refetchVideo } = useGetVideo(index, videoId);
+  console.log("🚀 > SummarizeVideo > video=", video)
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
     isChecked: true,
@@ -50,7 +51,8 @@ export function SummarizeVideo({ index, videoId, fetchVideo }) {
           setTaskVideo={setTaskVideo}
           taskVideo={taskVideo}
           index={index}
-          fetchVideo={fetchVideo}
+          refetchVideos={refetchVideos}
+          refetchVideo={refetchVideo}
         />
       </div>
       {video && !taskVideo && <Video url={video?.hls.video_url} />}

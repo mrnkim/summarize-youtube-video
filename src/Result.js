@@ -23,17 +23,12 @@ export function Result({
   setResultLoading,
   resultLoading,
 }) {
-  console.log("🚀 > video=", video);
-  console.log("🚀 >  isSubmitted=", isSubmitted);
-  console.log("🚀 > field1Prompt=", field1Prompt);
   const [field1Result, setField1Result] = useState({});
   const [field2Result, setField2Result] = useState({});
   const [field3Result, setField3Result] = useState({});
   /** Make API call to generate summary, chapters, and highlights of a video  */
   async function generate(data) {
-    console.log("🚀 > generate > data=", data);
     const response = await fetchGenerateSummary(queryClient, data, video._id);
-    console.log("🚀 > generate > response=", response);
     return response;
   }
 
@@ -46,7 +41,6 @@ export function Result({
     try {
       if (field1Prompt.type && field1Prompt.isChecked) {
         const response = await generate(field1Prompt);
-        console.log("🚀 > fetchData > response=", response);
         setField1Result({
           fieldName: field2Prompt.type,
           result: response?.summary,
