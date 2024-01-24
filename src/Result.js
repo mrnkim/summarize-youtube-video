@@ -20,12 +20,17 @@ export function Result({
   field1Prompt,
   field2Prompt,
   field3Prompt,
+  field1Result,
+  field2Result,
+  field3Result,
+  setField1Result,
+  setField2Result,
+  setField3Result,
   setResultLoading,
   resultLoading,
+  resetResults,
 }) {
-  const [field1Result, setField1Result] = useState({});
-  const [field2Result, setField2Result] = useState({});
-  const [field3Result, setField3Result] = useState({});
+  console.log("🚀 >  field1Result,=",  field1Result,)
   /** Make API call to generate summary, chapters, and highlights of a video  */
   async function generate(data) {
     const response = await fetchGenerateSummary(queryClient, data, video._id);
@@ -37,7 +42,7 @@ export function Result({
   /** Make API call to generate summary, chapters, and highlights of a video  */
 
   async function fetchData() {
-    reset();
+    resetResults();
     try {
       if (field1Prompt.type && field1Prompt.isChecked) {
         const response = await generate(field1Prompt);
@@ -70,22 +75,6 @@ export function Result({
     }
   }
 
-  /** Empty result(s) */
-  async function reset() {
-    setField1Result({
-      fieldName: null,
-      result: "",
-    });
-    setField2Result({
-      fieldName: null,
-      result: "",
-    });
-    setField3Result({
-      fieldName: null,
-      result: "",
-    });
-  }
-
   useEffect(() => {
     fetchData();
   }, [isSubmitted]);
@@ -105,14 +94,14 @@ export function Result({
     <div className="result">
       {resultLoading && <LoadingSpinner />}
 
-      {!resultLoading && field1Result.result?.length > 0 && (
+      {!resultLoading && field1Result && field1Result.result?.length > 0 && (
         <div className="resultSection">
           <h2>Sentences</h2>
           <div>{field1Result.result}</div>
         </div>
       )}
 
-      {!resultLoading && field2Result.result?.length > 0 && (
+      {!resultLoading && field2Result && field2Result.result?.length > 0 && (
         <div className="resultSection">
           <h2>Chapters</h2>
           <div>
@@ -123,7 +112,7 @@ export function Result({
                   key={chapter.chapter_title}
                 >
                   <Video
-                    url={video?.hls.video_url}
+                    url={video.source.url}
                     start={chapter.start}
                     end={chapter.end}
                   />
@@ -148,7 +137,7 @@ export function Result({
         </div>
       )}
 
-      {!resultLoading && field3Result.result?.length > 0 && (
+      {!resultLoading && field3Result && field3Result.result?.length > 0 && (
         <div className="resultSection">
           <h2>Highlights</h2>
           <div>
@@ -156,7 +145,7 @@ export function Result({
               field3Result.result.map((highlight) => (
                 <div className="videoAndDescription" key={highlight.highlight}>
                   <Video
-                    url={video?.hls.video_url}
+                    url={video.source.url}
                     start={highlight.start}
                     end={highlight.end}
                   />
@@ -165,7 +154,7 @@ export function Result({
                       {formatTime(highlight.start)} -{" "}
                       {formatTime(highlight.end)}
                     </div>
-                    <TitleAndSummary summary={highlight.highlight_summary} />
+                    <TitleAndSummary summary={highlight.highlight_summary} title={highlight.highlight} />
                   </div>
                 </div>
               ))

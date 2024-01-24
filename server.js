@@ -120,9 +120,7 @@ app.post("/videos/:videoId/summarize", async (request, response, next) => {
       headers: { ...headers, accept: "application/json" },
       data: { ...data, video_id: videoId },
     };
-    console.log("🚀 > app.post > options=", options);
     const apiResponse = await axios.request(options);
-    console.log("🚀 > app.post > apiResponse.data=", apiResponse.data);
     response.json(apiResponse.data);
   } catch (error) {
     return next(error);
@@ -144,23 +142,43 @@ app.get("/video-info", async (request, response, next) => {
 /** Index a Youtube video for analysis, returning a task ID */
 app.post("/index", async (request, response, next) => {
   const headers = {
-    accept: "application/json",
-    "Content-Type": "application/json",
+    "content-type": "application/json",
     "x-api-key": TWELVE_LABS_API_KEY,
   };
+  console.log("🚀 > app.post > options.request.body=",request.body)
 
   const options = {
     method: "POST",
-    url: `${API_BASE_URL}/tasks/external-provider`,
-    headers: headers,
+    url: "https://api.twelvelabs.io/v1.2/tasks/external-provider",
+    headers: { ...headers, accept: "application/json" },
     data: request.body.body,
   };
   console.log("🚀 > app.post > options=", options)
 
   try {
     const apiResponse = await axios.request(options);
+    console.log("🚀 > app.post > apiResponse=", apiResponse);
     response.json(apiResponse.data);
   } catch (error) {
-    response.json({ error });
+    console.error("🚀 > app.post > error=", error.response || error.message);
+  response.status(error.response?.status || 500).json({ error: error.message });
+  }
+});
+
+/** Check the status of a specific indexing task */
+app.get("/tasks/:taskId", async (request, response, next) => {
+  const taskId = request.params.taskId;
+  const headers = {
+    "Content-Type": "application/json",
+    "x-api-key": TWELVE_LABS_API_KEY,
+  };
+
+  try {
+    const apiResponse = await TWELVE_LABS_API.get(`/tasks/${taskId}`, {
+      headers,
+    });
+    response.json(apiResponse.data);
+  } catch (error) {
+    return next(error);
   }
 });

@@ -200,7 +200,7 @@ export function useGetTask(taskId) {
         (res) => res.data
       ),
     refetchInterval: (data) => {
-      return data?.status === "ready" ? false : 5000;
+      return (data?.status === "ready" || data?.status === "failed") ? false : 5000;
     },
     refetchIntervalInBackground: true,
   });
