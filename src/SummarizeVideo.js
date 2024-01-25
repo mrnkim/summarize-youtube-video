@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, Suspense } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Video } from "./Video";
 import { InputForm } from "./InputForm";
@@ -7,6 +7,10 @@ import { Result } from "./Result";
 import "./SummarizeVideo.css";
 import { useGetVideo } from "./apiHooks";
 import keys from "./keys";
+import LoadingSpinner from "./LoadingSpinner";
+// import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary } from "./ErrorBoundary";
+import ErrorFallback from "./ErrorFallback";
 
 /** Summarize a Video App
  *
@@ -15,7 +19,12 @@ import keys from "./keys";
  */
 
 export function SummarizeVideo({ index, videoId, refetchVideos }) {
-  const { data: video, refetch: refetchVideo } = useGetVideo(index, videoId);
+  const {
+    data: video,
+    refetch: refetchVideo,
+    error,
+  } = useGetVideo(index, videoId);
+  console.log("🚀 > SummarizeVideo > error=", error);
   console.log("🚀 > SummarizeVideo > video=", video);
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
@@ -39,7 +48,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
 
   const queryClient = useQueryClient();
 
-  const vidTitleRaw = video?.metadata.video_title;
+  const vidTitleRaw = video?.metadata?.video_title;
   const vidTitleClean = decodeAndCleanFilename(vidTitleRaw);
 
   /** Return clean video file name  */
@@ -94,7 +103,14 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           resetResults={resetResults}
         />
       </div>
-      {video && !taskVideo && <Video url={video.source.url} />}
+      {video && !taskVideo && (
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingSpinner />}>
+            <Video url={video.source?.url} />
+          </Suspense>
+        </ErrorBoundary>
+      )}
+
       {!video && !taskVideo && <p>Please Upload a video</p>}
       {!taskVideo && showVideoTitle && (
         <div className="videoTitle">{vidTitleClean}</div>

@@ -88,10 +88,21 @@ export function useGetVideo(indexId, videoId) {
         const response = await apiConfig.SERVER.get(
           `${apiConfig.INDEXES_URL}/${indexId}/videos/${videoId}`
         );
+
+        if (response.data.error) {
+          // Handle explicit server-side errors
+          throw new Error(response.data.error);
+        }
+
+        // Assuming your server response has a `data` field
         return response.data;
       } catch (error) {
-        throw error.response?.data || error;
+        throw error;
       }
+    },
+    onError: (error) => {
+      // Handle errors specific to the useQuery hook
+      console.error("useGetVideo hook error:", error);
     },
   });
 }
@@ -105,7 +116,7 @@ export async function fetchVideoInfo(queryClient, url) {
           `/video-info?url=${encodeURIComponent(url)}`
         );
         const respData = response.data;
-        console.log("🚀 > queryFn: > respData=", respData)
+        console.log("🚀 > queryFn: > respData=", respData);
         return respData;
       },
     });
@@ -115,7 +126,6 @@ export async function fetchVideoInfo(queryClient, url) {
     throw error;
   }
 }
-
 
 export async function fetchGenerateSummary(queryClient, data, videoId) {
   try {
@@ -200,7 +210,9 @@ export function useGetTask(taskId) {
         (res) => res.data
       ),
     refetchInterval: (data) => {
-      return (data?.status === "ready" || data?.status === "failed") ? false : 5000;
+      return data?.status === "ready" || data?.status === "failed"
+        ? false
+        : 5000;
     },
     refetchIntervalInBackground: true,
   });

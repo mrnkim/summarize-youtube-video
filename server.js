@@ -72,8 +72,13 @@ app.get("/indexes/:indexId/videos", async (request, response, next) => {
     );
     response.json(apiResponse.data);
   } catch (error) {
-    console.error("Error getting videos:", error);
-    response.status(500).json({ error: "Internal Server Error" });
+    console.error("Error from TWELVE_LABS_API:", error);
+
+    // Modify the error object to include status and message
+    const status = error.response?.status || 500;
+    const message = error.response?.data?.message || "Internal Server Error";
+
+    return next({ status, message });
   }
 });
 
@@ -91,14 +96,19 @@ app.get(
 
     try {
       const apiResponse = await TWELVE_LABS_API.get(
-        `/indexes/${indexId}/videos/${videoId}`,
+        `/indexes/${indexId}/videos/${videoI}`,
         {
           headers,
         }
       );
       response.json(apiResponse.data);
     } catch (error) {
-      return next(error);
+      console.error("Error from TWELVE_LABS_API:", error);
+      // Modify the error object to include status and message
+      const status = error.response?.status || 500;
+      const message = error.response?.data?.message || "Internal Server Error";
+
+      return next({ status, message });
     }
   }
 );
@@ -145,7 +155,7 @@ app.post("/index", async (request, response, next) => {
     "content-type": "application/json",
     "x-api-key": TWELVE_LABS_API_KEY,
   };
-  console.log("🚀 > app.post > options.request.body=",request.body)
+  console.log("🚀 > app.post > options.request.body=", request.body);
 
   const options = {
     method: "POST",
@@ -153,7 +163,7 @@ app.post("/index", async (request, response, next) => {
     headers: { ...headers, accept: "application/json" },
     data: request.body.body,
   };
-  console.log("🚀 > app.post > options=", options)
+  console.log("🚀 > app.post > options=", options);
 
   try {
     const apiResponse = await axios.request(options);
@@ -161,7 +171,9 @@ app.post("/index", async (request, response, next) => {
     response.json(apiResponse.data);
   } catch (error) {
     console.error("🚀 > app.post > error=", error.response || error.message);
-  response.status(error.response?.status || 500).json({ error: error.message });
+    response
+      .status(error.response?.status || 500)
+      .json({ error: error.message });
   }
 });
 

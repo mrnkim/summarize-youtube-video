@@ -6,6 +6,7 @@ import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
 import { SummarizeVideo } from "./SummarizeVideo";
 import { useGetVideos } from "./apiHooks";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 function App() {
   const INDEX_ID = process.env.REACT_APP_INDEX_ID;
@@ -18,13 +19,15 @@ function App() {
   }, [keys.VIDEOS, INDEX_ID, queryClient]);
 
   return (
-    <div className="app">
-      <SummarizeVideo
-        index={INDEX_ID}
-        videoId={data?.data[0]?._id || null}
-        refetchVideos={refetchVideos}
-      />
-    </div>
+    <ErrorBoundary>
+      <div className="app">
+        <SummarizeVideo
+          index={INDEX_ID}
+          videoId={data?.data[0]?._id || null}
+          refetchVideos={refetchVideos}
+        />
+      </div>
+    </ErrorBoundary>
   );
 }
 
