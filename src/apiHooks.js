@@ -148,6 +148,67 @@ export async function fetchGenerateSummary(queryClient, data, videoId) {
   }
 }
 
+export function useGenerateSummary(data, videoId, enabled) {
+  console.log("🚀 > useGenerateSummary > data, videoId, enabled=", data, videoId, enabled)
+  return useQuery({
+    queryKey: [keys.VIDEOS, "summarize", videoId],
+    queryFn: async () => {
+      if (!enabled) {
+        return null; // Return null or any placeholder value when not enabled
+      }
+
+      const response = await apiConfig.SERVER.post(
+        `/videos/${videoId}/summarize`,
+        { data }
+      );
+      console.log("🚀 > queryFn: > response=", response);
+      const respData = response.data;
+      return respData;
+    },
+    enabled: enabled,
+  });
+}
+export function useGenerateChapters(data, videoId, enabled) {
+  console.log("🚀 > useGenerateChapters > data, videoId, enabled=", data, videoId, enabled)
+  return useQuery({
+    queryKey: [keys.VIDEOS, "chapters", videoId],
+    queryFn: async () => {
+      if (!enabled) {
+        return null; // Return null or any placeholder value when not enabled
+      }
+
+      const response = await apiConfig.SERVER.post(
+        `/videos/${videoId}/summarize`,
+        { data }
+      );
+      console.log("🚀 > queryFn: > response=", response)
+      const respData = response.data;
+      return respData;
+    },
+    enabled: enabled,
+  });
+}
+export function useGenerateHighlights(data, videoId, enabled) {
+  console.log("🚀 > useGenerateHighlights > data, videoId, enabled=", data, videoId, enabled)
+  return useQuery({
+    queryKey: [keys.VIDEOS, "highlights", videoId],
+    queryFn: async () => {
+      if (!enabled) {
+        return null; // Return null or any placeholder value when not enabled
+      }
+
+      const response = await apiConfig.SERVER.post(
+        `/videos/${videoId}/summarize`,
+        { data }
+      );
+      console.log("🚀 > queryFn: > response=", response)
+      const respData = response.data;
+      return respData;
+    },
+    enabled: enabled,
+  });
+}
+
 export function useGetAllAuthors(indexId) {
   return useQuery({
     queryKey: [keys.AUTHORS, indexId],

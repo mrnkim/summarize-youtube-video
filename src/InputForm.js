@@ -1,4 +1,6 @@
 import { React } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import keys from "./keys";
 import "./InputForm.css";
 
 /** Receive user's check prompt for the API call
@@ -7,6 +9,7 @@ import "./InputForm.css";
  *
  */
 export function InputForm({
+  video,
   field1Prompt,
   setField1Prompt,
   field2Prompt,
@@ -17,10 +20,10 @@ export function InputForm({
   field2,
   field3,
   setIsSubmitted,
-  resultLoading,
-  setResultLoading,
   setShowVideoTitle,
 }) {
+  const queryClient = useQueryClient();
+
   /** Toggle check for each prompt */
   function handleCheck(promptType) {
     switch (promptType) {
@@ -62,9 +65,17 @@ export function InputForm({
     if (field3Prompt.isChecked) {
       field3Prompt["type"] = field3;
     }
+
     setIsSubmitted(true);
-    setResultLoading(true);
     setShowVideoTitle(true);
+    queryClient.invalidateQueries([
+      keys.VIDEOS,
+      video._id,
+      "summarize",
+      "chapters",
+      "highlights",
+    ]);
+
   }
 
   return (
@@ -113,10 +124,9 @@ export function InputForm({
           className="generateButton"
           onClick={handleClick}
           disabled={
-            resultLoading ||
-            (!field1Prompt.isChecked &&
-              !field2Prompt.isChecked &&
-              !field3Prompt.isChecked)
+            !field1Prompt.isChecked &&
+            !field2Prompt.isChecked &&
+            !field3Prompt.isChecked
           }
         >
           Generate

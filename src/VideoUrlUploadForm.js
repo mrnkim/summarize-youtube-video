@@ -1,7 +1,6 @@
 import "./VideoUrlUploadForm.css";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { Video } from "./Video";
-import TwelveLabsApi from "./TwelveLabsApi";
 import LoadingSpinner from "./LoadingSpinner.svg";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";

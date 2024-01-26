@@ -26,7 +26,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   const [field1Prompt, setField1Prompt] = useState({
     isChecked: true,
   });
-  console.log("🚀 > SummarizeVideo > field1Prompt=", field1Prompt)
   const [field2Prompt, setField2Prompt] = useState({
     isChecked: true,
   });
@@ -35,15 +34,12 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
-  const [resultLoading, setResultLoading] = useState(false);
+  // const [resultLoading, setResultLoading] = useState(false);
   const [field1Result, setField1Result] = useState({});
-  console.log("🚀 > SummarizeVideo > field1Result=", field1Result);
   const [field2Result, setField2Result] = useState({});
   const [field3Result, setField3Result] = useState({});
 
   const [taskVideo, setTaskVideo] = useState(null);
-  console.log("🚀 > SummarizeVideo > taskVideo=", taskVideo);
-
   const queryClient = useQueryClient();
 
   const vidTitleRaw = video?.metadata?.video_title;
@@ -125,6 +121,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
       )}
       {!taskVideo && (
         <InputForm
+          video={video}
           field1Prompt={field1Prompt}
           setField1Prompt={setField1Prompt}
           field2Prompt={field2Prompt}
@@ -135,8 +132,8 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           field2={field2}
           field3={field3}
           setIsSubmitted={setIsSubmitted}
-          resultLoading={resultLoading}
-          setResultLoading={setResultLoading}
+          // resultLoading={resultLoading}
+          // setResultLoading={setResultLoading}
           setShowVideoTitle={setShowVideoTitle}
         />
       )}
@@ -148,8 +145,8 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           field1Prompt={field1Prompt}
           field2Prompt={field2Prompt}
           field3Prompt={field3Prompt}
-          setResultLoading={setResultLoading}
-          resultLoading={resultLoading}
+          // setResultLoading={setResultLoading}
+          // resultLoading={resultLoading}
           resetResults={resetResults}
           field1Result={field1Result}
           field2Result={field2Result}

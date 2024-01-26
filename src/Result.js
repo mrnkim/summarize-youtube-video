@@ -2,16 +2,23 @@ import { React, useState, useEffect, Suspense } from "react";
 import { TitleAndSummary } from "./TitleAndSummary";
 import { Video } from "./Video";
 import { useQueryClient } from "@tanstack/react-query";
-import TwelveLabsApi from "./TwelveLabsApi";
 import LoadingSpinner from "./LoadingSpinner";
 import "./Result.css";
-import { fetchGenerateSummary } from "./apiHooks";
+import {
+  fetchGenerateSummary,
+  useGenerateSummary,
+  useGenerateChapters,
+  useGenerateHighlights,
+} from "./apiHooks";
+import keys from "./keys";
 
 /** Shows the results
  *
  * App -> SummarizeVideo -> {Result}
  *
  */
+
+//TODO: Fix result logic to update check status
 
 export function Result({
   video,
@@ -20,62 +27,123 @@ export function Result({
   field1Prompt,
   field2Prompt,
   field3Prompt,
-  field1Result,
-  field2Result,
-  field3Result,
+  // field1Result,
+  // field2Result,
+  // field3Result,
   setField1Result,
   setField2Result,
   setField3Result,
-  setResultLoading,
-  resultLoading,
   resetResults,
 }) {
-  console.log("🚀 >  isSubmitted=",  isSubmitted)
-  /** Make API call to generate summary, chapters, and highlights of a video  */
-  async function generate(data) {
-    const response = await fetchGenerateSummary(queryClient, data, video._id);
-    return response;
-  }
+  console.log("🚀 >  isSubmitted=", isSubmitted);
+  const {
+    data: field1Result,
+    isLoading: field1Loading,
+    isStale: field1Invalidated,
+  } = useGenerateSummary(
+    field1Prompt,
+    video._id,
+    Boolean(field1Prompt.type && field1Prompt.isChecked && isSubmitted)
+  );
+  console.log("🚀 > field1Invalidated=", field1Invalidated);
+  console.log("🚀 > field1Result=", field1Result);
+  const {
+    data: field2Result,
+    isLoading: field2Loading,
+    isStale: field2Invalidated,
+  } = useGenerateChapters(
+    field2Prompt,
+    video._id,
+    Boolean(field2Prompt.type && field2Prompt.isChecked && isSubmitted)
+  );
+  console.log("🚀 > field2Invalidated=", field2Invalidated);
+  console.log("🚀 > field2Result=", field2Result);
+  const {
+    data: field3Result,
+    isLoading: field3Loading,
+    isStale: field3Invalidated,
+  } = useGenerateHighlights(
+    field3Prompt,
+    video._id,
+    Boolean(field3Prompt.type && field3Prompt.isChecked && isSubmitted)
+  );
+  console.log("🚀 > field3Invalidated=", field3Invalidated);
+  console.log("🚀 > field3Result=", field3Result);
 
   const queryClient = useQueryClient();
 
-  async function fetchData() {
-    resetResults();
-    try {
-      if (field1Prompt.type && field1Prompt.isChecked) {
-        const response = await generate(field1Prompt);
-        setField1Result({
-          fieldName: field2Prompt.type,
-          result: response?.summary,
-        });
-      }
+  /** Make API call to generate summary, chapters, and highlights of a video  */
+  // async function generate(data) {
+  //   const response = await fetchGenerateSummary(queryClient, data, video._id);
+  //   return response;
+  // }
 
-      if (field2Prompt.type && field2Prompt.isChecked) {
-        const response = await generate(field2Prompt);
-        setField2Result({
-          fieldName: field2Prompt.type,
-          result: response?.chapters,
-        });
-      }
+  // const queryClient = useQueryClient();
 
-      if (field3Prompt.type && field3Prompt.isChecked) {
-        const response = await generate(field3Prompt);
-        setField3Result({
-          fieldName: field3Prompt.type,
-          result: response?.highlights,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setResultLoading(false);
-      setIsSubmitted(false);
-    }
-  }
+  // async function fetchData() {
+  //   resetResults();
+  //   try {
+  //     if (field1Prompt.type && field1Prompt.isChecked) {
+  //       const response = await generate(field1Prompt);
+  //       setField1Result({
+  //         fieldName: field2Prompt.type,
+  //         result: response?.summary,
+  //       });
+  //     }
+
+  //     if (field2Prompt.type && field2Prompt.isChecked) {
+  //       const response = await generate(field2Prompt);
+  //       setField2Result({
+  //         fieldName: field2Prompt.type,
+  //         result: response?.chapters,
+  //       });
+  //     }
+
+  //     if (field3Prompt.type && field3Prompt.isChecked) {
+  //       const response = await generate(field3Prompt);
+  //       setField3Result({
+  //         fieldName: field3Prompt.type,
+  //         result: response?.highlights,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setResultLoading(false);
+  //     setIsSubmitted(false);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   queryClient.invalidateQueries([
+  //     keys.VIDEOS,
+  //     video._id,
+  //     "summarize",
+  //     "chapters",
+  //     "highlights",
+  //   ]);
+  // }, [
+  //   keys.VIDEOS,
+  //   video._id,
+  //   "summarize",
+  //   "chapters",
+  //   "highlights",
+  //   queryClient,
+  //   field1Prompt,
+  //   field2Prompt,
+  //   field3Prompt,
+  //   isSubmitted,
+  // ]);
 
   useEffect(() => {
-    fetchData();
-  }, [isSubmitted]);
+    queryClient.invalidateQueries([
+      keys.VIDEOS,
+      video._id,
+      "summarize",
+      "chapters",
+      "highlights",
+    ]);
+  }, [field1Prompt, field2Prompt, field3Prompt]);
 
   /** Format seconds to hours:minutes:seconds */
   function formatTime(timeInSeconds) {
@@ -90,23 +158,21 @@ export function Result({
   }
   return (
     <div className="result">
-      {resultLoading && <LoadingSpinner />}
+      {/* {resultLoading && <LoadingSpinner />} */}
 
-      {!resultLoading && field1Result && field1Result.result?.length > 0 && (
-        <Suspense fallback={<LoadingSpinner />}>
-          <div className="resultSection">
-            <h2>Sentences</h2>
-            <div>{field1Result.result}</div>
-          </div>
-        </Suspense>
+      {!field1Loading && field1Result && (
+        <div className="resultSection">
+          <h2>Sentences</h2>
+          <div>{field1Result.summary}</div>
+        </div>
       )}
 
-      {!resultLoading && field2Result && field2Result.result?.length > 0 && (
+      {!field2Loading && field2Result && (
         <div className="resultSection">
           <h2>Chapters</h2>
           <div>
-            {Array.isArray(field2Result.result) ? (
-              field2Result.result.map((chapter) => (
+            {Array.isArray(field2Result.chapters) ? (
+              field2Result.chapters.map((chapter) => (
                 <div
                   className="videoAndDescription"
                   key={chapter.chapter_title}
@@ -137,12 +203,12 @@ export function Result({
         </div>
       )}
 
-      {!resultLoading && field3Result && field3Result.result?.length > 0 && (
+      {!field3Loading && field3Result && (
         <div className="resultSection">
           <h2>Highlights</h2>
           <div>
-            {Array.isArray(field3Result.result) ? (
-              field3Result.result.map((highlight) => (
+            {Array.isArray(field3Result.highlights) ? (
+              field3Result.highlights.map((highlight) => (
                 <div className="videoAndDescription" key={highlight.highlight}>
                   <Video
                     url={video.source.url}
