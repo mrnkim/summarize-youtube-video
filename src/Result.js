@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, Suspense } from "react";
 import { TitleAndSummary } from "./TitleAndSummary";
 import { Video } from "./Video";
 import { useQueryClient } from "@tanstack/react-query";
@@ -30,7 +30,7 @@ export function Result({
   resultLoading,
   resetResults,
 }) {
-  console.log("🚀 >  field1Result,=",  field1Result,)
+  console.log("🚀 >  isSubmitted=",  isSubmitted)
   /** Make API call to generate summary, chapters, and highlights of a video  */
   async function generate(data) {
     const response = await fetchGenerateSummary(queryClient, data, video._id);
@@ -38,8 +38,6 @@ export function Result({
   }
 
   const queryClient = useQueryClient();
-
-  /** Make API call to generate summary, chapters, and highlights of a video  */
 
   async function fetchData() {
     resetResults();
@@ -95,10 +93,12 @@ export function Result({
       {resultLoading && <LoadingSpinner />}
 
       {!resultLoading && field1Result && field1Result.result?.length > 0 && (
-        <div className="resultSection">
-          <h2>Sentences</h2>
-          <div>{field1Result.result}</div>
-        </div>
+        <Suspense fallback={<LoadingSpinner />}>
+          <div className="resultSection">
+            <h2>Sentences</h2>
+            <div>{field1Result.result}</div>
+          </div>
+        </Suspense>
       )}
 
       {!resultLoading && field2Result && field2Result.result?.length > 0 && (
@@ -154,7 +154,10 @@ export function Result({
                       {formatTime(highlight.start)} -{" "}
                       {formatTime(highlight.end)}
                     </div>
-                    <TitleAndSummary summary={highlight.highlight_summary} title={highlight.highlight} />
+                    <TitleAndSummary
+                      summary={highlight.highlight_summary}
+                      title={highlight.highlight}
+                    />
                   </div>
                 </div>
               ))

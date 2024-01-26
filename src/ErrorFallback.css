@@ -27,3 +27,19 @@
     font-weight: 400;
     line-height: 1.25rem;
       }
+
+      .resetButton {
+        padding: 10px 12px;
+        align-items: center;
+        background: #FF0099;
+        color: white;
+        border: none;
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .resetButtonWrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 5rem;
+      }

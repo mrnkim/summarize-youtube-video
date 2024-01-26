@@ -96,7 +96,7 @@ app.get(
 
     try {
       const apiResponse = await TWELVE_LABS_API.get(
-        `/indexes/${indexId}/videos/${videoI}`,
+        `/indexes/${indexId}/videos/${videoId}`,
         {
           headers,
         }

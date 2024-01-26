@@ -10,9 +10,6 @@ import "./Video.css";
  */
 
 export function Video({ url, start, end }) {
-  console.log("🚀 > Video > end=", end);
-  console.log("🚀 > Video > start=", start);
-  console.log("🚀 > Video > url=", url);
   return (
     <div className="video">
       {!start && !end && (

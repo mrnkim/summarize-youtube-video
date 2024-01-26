@@ -8,9 +8,7 @@ import "./SummarizeVideo.css";
 import { useGetVideo } from "./apiHooks";
 import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
-// import { ErrorBoundary } from "react-error-boundary";
 import { ErrorBoundary } from "./ErrorBoundary";
-import ErrorFallback from "./ErrorFallback";
 
 /** Summarize a Video App
  *
@@ -24,12 +22,11 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
     refetch: refetchVideo,
     error,
   } = useGetVideo(index, videoId);
-  console.log("🚀 > SummarizeVideo > error=", error);
-  console.log("🚀 > SummarizeVideo > video=", video);
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
     isChecked: true,
   });
+  console.log("🚀 > SummarizeVideo > field1Prompt=", field1Prompt)
   const [field2Prompt, setField2Prompt] = useState({
     isChecked: true,
   });
@@ -37,14 +34,15 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
     isChecked: true,
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  console.log("🚀 > SummarizeVideo > isSubmitted=", isSubmitted);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   const [resultLoading, setResultLoading] = useState(false);
   const [field1Result, setField1Result] = useState({});
+  console.log("🚀 > SummarizeVideo > field1Result=", field1Result);
   const [field2Result, setField2Result] = useState({});
   const [field3Result, setField3Result] = useState({});
 
   const [taskVideo, setTaskVideo] = useState(null);
+  console.log("🚀 > SummarizeVideo > taskVideo=", taskVideo);
 
   const queryClient = useQueryClient();
 
@@ -76,8 +74,19 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
     });
   }
 
+  async function resetPrompts() {
+    setField1Prompt({
+      isChecked: false,
+    });
+    setField2Prompt({
+      isChecked: false,
+    });
+    setField3Prompt({
+      isChecked: false,
+    });
+  }
+
   useEffect(() => {
-    console.log("Video data updated:", video);
     const fetchData = async () => {
       await queryClient.invalidateQueries({
         queryKey: [keys.VIDEOS, index, videoId],
@@ -87,8 +96,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
 
     fetchData();
   }, [index, videoId, queryClient, refetchVideo]);
-
-  console.log("Rendering with video:", video);
 
   return (
     <div className="summarizeVideo">
@@ -101,6 +108,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           refetchVideos={refetchVideos}
           refetchVideo={refetchVideo}
           resetResults={resetResults}
+          resetPrompts={resetPrompts}
         />
       </div>
       {video && !taskVideo && (

@@ -4,6 +4,7 @@ import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
+  useIsFetching,
 } from "@tanstack/react-query";
 import keys from "./keys";
 import apiConfig from "./apiConfig";
@@ -116,7 +117,6 @@ export async function fetchVideoInfo(queryClient, url) {
           `/video-info?url=${encodeURIComponent(url)}`
         );
         const respData = response.data;
-        console.log("🚀 > queryFn: > respData=", respData);
         return respData;
       },
     });
@@ -136,6 +136,7 @@ export async function fetchGenerateSummary(queryClient, data, videoId) {
           `/videos/${videoId}/summarize`,
           { data: data }
         );
+        console.log("🚀 > queryFn: > response=", response);
         const respData = response.data;
         return respData;
       },
