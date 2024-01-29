@@ -35,7 +35,6 @@ export function Result({
   setField3Result,
   resetResults,
 }) {
-  console.log("🚀 >  isSubmitted=", isSubmitted);
   const {
     data: field1Result,
     isLoading: field1Loading,
@@ -45,8 +44,6 @@ export function Result({
     video._id,
     Boolean(field1Prompt.type && field1Prompt.isChecked && isSubmitted)
   );
-  console.log("🚀 > field1Invalidated=", field1Invalidated);
-  console.log("🚀 > field1Result=", field1Result);
   const {
     data: field2Result,
     isLoading: field2Loading,
@@ -56,8 +53,6 @@ export function Result({
     video._id,
     Boolean(field2Prompt.type && field2Prompt.isChecked && isSubmitted)
   );
-  console.log("🚀 > field2Invalidated=", field2Invalidated);
-  console.log("🚀 > field2Result=", field2Result);
   const {
     data: field3Result,
     isLoading: field3Loading,
@@ -67,9 +62,6 @@ export function Result({
     video._id,
     Boolean(field3Prompt.type && field3Prompt.isChecked && isSubmitted)
   );
-  console.log("🚀 > field3Invalidated=", field3Invalidated);
-  console.log("🚀 > field3Result=", field3Result);
-
   const queryClient = useQueryClient();
 
   /** Make API call to generate summary, chapters, and highlights of a video  */

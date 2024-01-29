@@ -57,16 +57,16 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   /** Empty result(s) */
   async function resetResults() {
     setField1Result({
-      fieldName: null,
-      result: "",
+      id: null,
+      summary: "",
     });
     setField2Result({
-      fieldName: null,
-      result: "",
+      id: null,
+      chapters: "",
     });
     setField3Result({
-      fieldName: null,
-      result: "",
+      id: null,
+      highlights: "",
     });
   }
 

@@ -136,7 +136,6 @@ export async function fetchGenerateSummary(queryClient, data, videoId) {
           `/videos/${videoId}/summarize`,
           { data: data }
         );
-        console.log("🚀 > queryFn: > response=", response);
         const respData = response.data;
         return respData;
       },
@@ -149,7 +148,6 @@ export async function fetchGenerateSummary(queryClient, data, videoId) {
 }
 
 export function useGenerateSummary(data, videoId, enabled) {
-  console.log("🚀 > useGenerateSummary > data, videoId, enabled=", data, videoId, enabled)
   return useQuery({
     queryKey: [keys.VIDEOS, "summarize", videoId],
     queryFn: async () => {
@@ -161,7 +159,6 @@ export function useGenerateSummary(data, videoId, enabled) {
         `/videos/${videoId}/summarize`,
         { data }
       );
-      console.log("🚀 > queryFn: > response=", response);
       const respData = response.data;
       return respData;
     },
@@ -169,7 +166,6 @@ export function useGenerateSummary(data, videoId, enabled) {
   });
 }
 export function useGenerateChapters(data, videoId, enabled) {
-  console.log("🚀 > useGenerateChapters > data, videoId, enabled=", data, videoId, enabled)
   return useQuery({
     queryKey: [keys.VIDEOS, "chapters", videoId],
     queryFn: async () => {
@@ -181,7 +177,6 @@ export function useGenerateChapters(data, videoId, enabled) {
         `/videos/${videoId}/summarize`,
         { data }
       );
-      console.log("🚀 > queryFn: > response=", response)
       const respData = response.data;
       return respData;
     },
@@ -189,7 +184,6 @@ export function useGenerateChapters(data, videoId, enabled) {
   });
 }
 export function useGenerateHighlights(data, videoId, enabled) {
-  console.log("🚀 > useGenerateHighlights > data, videoId, enabled=", data, videoId, enabled)
   return useQuery({
     queryKey: [keys.VIDEOS, "highlights", videoId],
     queryFn: async () => {
@@ -201,7 +195,6 @@ export function useGenerateHighlights(data, videoId, enabled) {
         `/videos/${videoId}/summarize`,
         { data }
       );
-      console.log("🚀 > queryFn: > response=", response)
       const respData = response.data;
       return respData;
     },

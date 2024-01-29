@@ -6,7 +6,7 @@ import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchVideoInfo } from "./apiHooks";
 import { Task } from "./Task";
-import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 const SERVER_BASE_URL = new URL(
   `${process.env.REACT_APP_SERVER_URL}:${process.env.REACT_APP_PORT_NUMBER}`
@@ -31,6 +31,7 @@ export function VideoUrlUploadForm({
   const [videoUrl, setVideoUrl] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [error, setError] = useState(null);
+  console.log("🚀 > error=", error);
   const inputRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -42,9 +43,7 @@ export function VideoUrlUploadForm({
   function handleChange(evt) {
     const input = evt.target;
     setVideoUrl(input.value);
-    if (error && input?.value.trim() !== "") {
-      setError("");
-    }
+    setError(null);
   }
 
   /** Get information of a video  */
@@ -78,11 +77,18 @@ export function VideoUrlUploadForm({
   /** Get information of a video and set it as task */
   async function handleSubmit(evt) {
     evt.preventDefault();
-    const videoInfo = await getVideoInfo(videoUrl);
-    setTaskVideo(videoInfo);
-    inputRef.current.value = "";
-    resetPrompts();
-    resetResults();
+    try {
+      if (!videoUrl?.trim()) {
+        throw new Error("Please enter a valid video URL");
+      }
+      const videoInfo = await getVideoInfo(videoUrl);
+      setTaskVideo(videoInfo);
+      inputRef.current.value = "";
+      resetPrompts();
+      resetResults();
+    } catch (error) {
+      setError(error);
+    }
   }
 
   useEffect(() => {
@@ -105,23 +111,23 @@ export function VideoUrlUploadForm({
           Upload
         </button>
       </form>
-      {taskVideo && (
-        <div>
-          <ErrorBoundary>
-            <Suspense fallback={<LoadingSpinner />}>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner />}>
+          {taskVideo && (
+            <div>
               <Video url={taskVideo.video_url} />{" "}
-            </Suspense>
-          </ErrorBoundary>
-          {taskId && (
-            <Task
-              taskId={taskId}
-              refetchVideos={refetchVideos}
-              index={index}
-              setTaskVideo={setTaskVideo}
-            />
+              {taskId && (
+                <Task
+                  taskId={taskId}
+                  refetchVideos={refetchVideos}
+                  index={index}
+                  setTaskVideo={setTaskVideo}
+                />
+              )}
+            </div>
           )}
-        </div>
-      )}
+        </Suspense>
+      </ErrorBoundary>
 
       {error && <div className="errorMessage">{error}</div>}
     </div>
