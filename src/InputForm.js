@@ -21,6 +21,7 @@ export function InputForm({
   field3,
   setIsSubmitted,
   setShowVideoTitle,
+  resetResults,
 }) {
   const queryClient = useQueryClient();
 
@@ -53,6 +54,8 @@ export function InputForm({
   /** Combine user input and make API call(s)  */
   async function handleClick(event) {
     event.preventDefault();
+    resetResults();
+    console.log("WHAT??");
 
     if (field1Prompt.isChecked) {
       field1Prompt["type"] = field1;
@@ -75,7 +78,6 @@ export function InputForm({
       "chapters",
       "highlights",
     ]);
-
   }
 
   return (

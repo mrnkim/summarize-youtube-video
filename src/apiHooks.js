@@ -159,6 +159,7 @@ export function useGenerateSummary(data, videoId, enabled) {
         `/videos/${videoId}/summarize`,
         { data }
       );
+      console.log("🚀 > queryFn: > response=", response)
       const respData = response.data;
       return respData;
     },

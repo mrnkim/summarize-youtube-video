@@ -1,6 +1,5 @@
-// App.js
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, Suspense } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
@@ -16,17 +15,19 @@ function App() {
 
   useEffect(() => {
     queryClient.invalidateQueries([keys.VIDEOS, INDEX_ID]);
-  }, [keys.VIDEOS, INDEX_ID, queryClient]);
+  }, [INDEX_ID, queryClient]);
 
   return (
     <ErrorBoundary>
-      <div className="app">
-        <SummarizeVideo
-          index={INDEX_ID}
-          videoId={data?.data[0]?._id || null}
-          refetchVideos={refetchVideos}
-        />
-      </div>
+      <Suspense fallback={<LoadingSpinner />}>
+        <div className="app">
+          <SummarizeVideo
+            index={INDEX_ID}
+            videoId={data?.data[0]?._id || null}
+            refetchVideos={refetchVideos}
+          />
+        </div>
+      </Suspense>
     </ErrorBoundary>
   );
 }

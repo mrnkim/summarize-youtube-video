@@ -6,6 +6,7 @@ import "./ErrorFallback.css";
 // TODO: Add refetch to Go Back button
 /** Component to show when there is an error */
 function ErrorFallback({ error }) {
+  console.log("🚀 > ErrorFallback > error=", error)
   return (
     <div role="alert">
       <div className="warningMessageWrapper">

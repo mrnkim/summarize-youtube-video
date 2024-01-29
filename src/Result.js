@@ -1,16 +1,16 @@
-import { React, useState, useEffect, Suspense } from "react";
+import { React, useEffect } from "react";
 import { TitleAndSummary } from "./TitleAndSummary";
 import { Video } from "./Video";
 import { useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "./LoadingSpinner";
 import "./Result.css";
 import {
-  fetchGenerateSummary,
   useGenerateSummary,
   useGenerateChapters,
   useGenerateHighlights,
 } from "./apiHooks";
 import keys from "./keys";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 /** Shows the results
  *
@@ -18,114 +18,29 @@ import keys from "./keys";
  *
  */
 
-//TODO: Fix result logic to update check status
-
 export function Result({
   video,
-  setIsSubmitted,
   isSubmitted,
   field1Prompt,
   field2Prompt,
   field3Prompt,
-  // field1Result,
-  // field2Result,
-  // field3Result,
-  setField1Result,
-  setField2Result,
-  setField3Result,
-  resetResults,
 }) {
-  const {
-    data: field1Result,
-    isLoading: field1Loading,
-    isStale: field1Invalidated,
-  } = useGenerateSummary(
+  const { data: field1Result } = useGenerateSummary(
     field1Prompt,
     video._id,
     Boolean(field1Prompt.type && field1Prompt.isChecked && isSubmitted)
   );
-  const {
-    data: field2Result,
-    isLoading: field2Loading,
-    isStale: field2Invalidated,
-  } = useGenerateChapters(
+  const { data: field2Result } = useGenerateChapters(
     field2Prompt,
     video._id,
     Boolean(field2Prompt.type && field2Prompt.isChecked && isSubmitted)
   );
-  const {
-    data: field3Result,
-    isLoading: field3Loading,
-    isStale: field3Invalidated,
-  } = useGenerateHighlights(
+  const { data: field3Result } = useGenerateHighlights(
     field3Prompt,
     video._id,
     Boolean(field3Prompt.type && field3Prompt.isChecked && isSubmitted)
   );
   const queryClient = useQueryClient();
-
-  /** Make API call to generate summary, chapters, and highlights of a video  */
-  // async function generate(data) {
-  //   const response = await fetchGenerateSummary(queryClient, data, video._id);
-  //   return response;
-  // }
-
-  // const queryClient = useQueryClient();
-
-  // async function fetchData() {
-  //   resetResults();
-  //   try {
-  //     if (field1Prompt.type && field1Prompt.isChecked) {
-  //       const response = await generate(field1Prompt);
-  //       setField1Result({
-  //         fieldName: field2Prompt.type,
-  //         result: response?.summary,
-  //       });
-  //     }
-
-  //     if (field2Prompt.type && field2Prompt.isChecked) {
-  //       const response = await generate(field2Prompt);
-  //       setField2Result({
-  //         fieldName: field2Prompt.type,
-  //         result: response?.chapters,
-  //       });
-  //     }
-
-  //     if (field3Prompt.type && field3Prompt.isChecked) {
-  //       const response = await generate(field3Prompt);
-  //       setField3Result({
-  //         fieldName: field3Prompt.type,
-  //         result: response?.highlights,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setResultLoading(false);
-  //     setIsSubmitted(false);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   queryClient.invalidateQueries([
-  //     keys.VIDEOS,
-  //     video._id,
-  //     "summarize",
-  //     "chapters",
-  //     "highlights",
-  //   ]);
-  // }, [
-  //   keys.VIDEOS,
-  //   video._id,
-  //   "summarize",
-  //   "chapters",
-  //   "highlights",
-  //   queryClient,
-  //   field1Prompt,
-  //   field2Prompt,
-  //   field3Prompt,
-  //   isSubmitted,
-  // ]);
 
   useEffect(() => {
     queryClient.invalidateQueries([
@@ -149,82 +64,94 @@ export function Result({
     return formattedTime;
   }
   return (
-    <div className="result">
-      {/* {resultLoading && <LoadingSpinner />} */}
-
-      {!field1Loading && field1Result && (
-        <div className="resultSection">
-          <h2>Sentences</h2>
-          <div>{field1Result.summary}</div>
-        </div>
-      )}
-
-      {!field2Loading && field2Result && (
-        <div className="resultSection">
-          <h2>Chapters</h2>
-          <div>
-            {Array.isArray(field2Result.chapters) ? (
-              field2Result.chapters.map((chapter) => (
-                <div
-                  className="videoAndDescription"
-                  key={chapter.chapter_title}
-                >
-                  <Video
-                    url={video.source.url}
-                    start={chapter.start}
-                    end={chapter.end}
-                  />
-                  <div className="titleAndSummary">
-                    <div className="titleAndTimeStamp">
-                      <div className="titleSummary">
-                        {" "}
-                        {chapter.chapter_title}
-                      </div>
-                      <div className="timeStamp">
-                        {formatTime(chapter.start)} - {formatTime(chapter.end)}
-                      </div>
-                    </div>
-                    <div className="summary">{chapter.chapter_summary}</div>
-                  </div>
-                </div>
-              ))
+    <ErrorBoundary>
+      <div className="result">
+        {field1Prompt.isChecked && isSubmitted && (
+          <div className="resultSection">
+            <h2>Sentences</h2>
+            {field1Result ? (
+              <div>{field1Result.summary}</div>
             ) : (
-              <p>No chapters available</p>
+              <LoadingSpinner />
             )}
           </div>
-        </div>
-      )}
+        )}
 
-      {!field3Loading && field3Result && (
-        <div className="resultSection">
-          <h2>Highlights</h2>
-          <div>
-            {Array.isArray(field3Result.highlights) ? (
-              field3Result.highlights.map((highlight) => (
-                <div className="videoAndDescription" key={highlight.highlight}>
-                  <Video
-                    url={video.source.url}
-                    start={highlight.start}
-                    end={highlight.end}
-                  />
-                  <div className="titleAndSummary">
-                    <div className="timeStamp">
-                      {formatTime(highlight.start)} -{" "}
-                      {formatTime(highlight.end)}
-                    </div>
-                    <TitleAndSummary
-                      summary={highlight.highlight_summary}
-                      title={highlight.highlight}
+        {field2Prompt.isChecked && isSubmitted && (
+          <div className="resultSection">
+            <h2>Chapters</h2>
+            <div>
+              {field2Result &&
+                Array.isArray(field2Result.chapters) &&
+                field2Result.chapters.map((chapter) => (
+                  <div
+                    className="videoAndDescription"
+                    key={chapter.chapter_title}
+                  >
+                    <Video
+                      url={video.source.url}
+                      start={chapter.start}
+                      end={chapter.end}
                     />
+                    <div className="titleAndSummary">
+                      <div className="titleAndTimeStamp">
+                        <div className="titleSummary">
+                          {" "}
+                          {chapter.chapter_title}
+                        </div>
+                        <div className="timeStamp">
+                          {formatTime(chapter.start)} -{" "}
+                          {formatTime(chapter.end)}
+                        </div>
+                      </div>
+                      <div className="summary">{chapter.chapter_summary}</div>
+                    </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p>No highlights available</p>
-            )}
+                ))}
+              {field2Result && !field2Result.chapters && (
+                <p>No chapters available</p>
+              )}
+              {!field2Result && <LoadingSpinner />}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+
+        {field3Prompt.isChecked && isSubmitted && (
+          <div className="resultSection">
+            <h2>Highlights</h2>
+            <div>
+              {field3Result &&
+                Array.isArray(field3Result.highlights) &&
+                field3Result.highlights.map((highlight) => (
+                  <div
+                    className="videoAndDescription"
+                    key={highlight.highlight}
+                  >
+                    <Video
+                      url={video.source.url}
+                      start={highlight.start}
+                      end={highlight.end}
+                    />
+                    <div className="titleAndSummary">
+                      <div className="timeStamp">
+                        {formatTime(highlight.start)} -{" "}
+                        {formatTime(highlight.end)}
+                      </div>
+                      <TitleAndSummary
+                        summary={highlight.highlight_summary}
+                        title={highlight.highlight}
+                      />
+                    </div>
+                  </div>
+                ))}
+              {field3Result && !field3Result.highlights && (
+                <p>No highlights available</p>
+              )}
+              {!field3Result && <LoadingSpinner />}
+            </div>
+          </div>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }

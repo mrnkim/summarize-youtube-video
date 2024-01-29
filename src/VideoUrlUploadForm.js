@@ -31,7 +31,6 @@ export function VideoUrlUploadForm({
   const [videoUrl, setVideoUrl] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [error, setError] = useState(null);
-  console.log("🚀 > error=", error);
   const inputRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -87,7 +86,7 @@ export function VideoUrlUploadForm({
       resetPrompts();
       resetResults();
     } catch (error) {
-      setError(error);
+      setError(error.message);
     }
   }
 

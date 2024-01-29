@@ -116,9 +116,9 @@ app.get(
 /** Summarize a video */
 app.post("/videos/:videoId/summarize", async (request, response, next) => {
   const videoId = request.params.videoId;
-  console.log("🚀 > app.post > videoId=", videoId)
+  console.log("🚀 > app.post > videoId=", videoId);
   let data = request.body.data;
-  console.log("🚀 > app.post > data=", data)
+  console.log("🚀 > app.post > data=", data);
 
   let headers = {
     "Content-Type": "application/json",
@@ -132,7 +132,7 @@ app.post("/videos/:videoId/summarize", async (request, response, next) => {
       headers: { ...headers, accept: "application/json" },
       data: { ...data, video_id: videoId },
     };
-    console.log("🚀 > app.post > options=", options)
+    console.log("🚀 > app.post > options=", options);
     const apiResponse = await axios.request(options);
     response.json(apiResponse.data);
   } catch (error) {
@@ -140,7 +140,7 @@ app.post("/videos/:videoId/summarize", async (request, response, next) => {
   }
 });
 
-/** Get JSON-formatted video information from a YouTube URL using ytdl */
+/** Get video information from a YouTube URL using ytdl */
 app.get("/video-info", async (request, response, next) => {
   try {
     let url = request.query.url;

@@ -20,8 +20,11 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   const {
     data: video,
     refetch: refetchVideo,
-    error,
+    isLoading,
+    isFetching,
   } = useGetVideo(index, videoId);
+  console.log("🚀 > SummarizeVideo > isFetching=", isFetching);
+  console.log("🚀 > SummarizeVideo > isLoading=", isLoading);
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
     isChecked: true,
@@ -56,6 +59,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
 
   /** Empty result(s) */
   async function resetResults() {
+    console.log("resetting!");
     setField1Result({
       id: null,
       summary: "",
@@ -135,6 +139,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           // resultLoading={resultLoading}
           // setResultLoading={setResultLoading}
           setShowVideoTitle={setShowVideoTitle}
+          resetResults={resetResults}
         />
       )}
       {!taskVideo && (
