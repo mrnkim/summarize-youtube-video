@@ -1,7 +1,7 @@
 import "./VideoUrlUploadForm.css";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { Video } from "./Video";
-import LoadingSpinner from "./LoadingSpinner.svg";
+import LoadingSpinner from "./LoadingSpinner";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchVideoInfo } from "./apiHooks";
@@ -114,7 +114,8 @@ export function VideoUrlUploadForm({
         <Suspense fallback={<LoadingSpinner />}>
           {taskVideo && (
             <div>
-              <Video url={taskVideo.video_url} />{" "}
+              <Video url={taskVideo.video_url} />
+              {!taskId && "Submitting..."}
               {taskId && (
                 <Task
                   taskId={taskId}

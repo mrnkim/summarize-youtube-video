@@ -7,6 +7,7 @@ import { ErrorBoundary } from "react-error-boundary";
 
 export function Task({ taskId, refetchVideos, setTaskVideo }) {
   const { data } = useGetTask(taskId);
+  console.log("🚀 > Task > data=", data);
 
   const queryClient = useQueryClient();
 
@@ -28,7 +29,7 @@ export function Task({ taskId, refetchVideos, setTaskVideo }) {
       <LoadingSpinner />
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
-          {data ? `${data.status}...` : "Submitting..."}
+          {data && data.status ? `${data.status}...` : null}
         </Suspense>
       </ErrorBoundary>
     </div>
