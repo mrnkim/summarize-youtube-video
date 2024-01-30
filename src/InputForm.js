@@ -2,6 +2,7 @@ import { React } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import keys from "./keys";
 import "./InputForm.css";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 /** Receive user's check prompt for the API call
  *
@@ -27,6 +28,7 @@ export function InputForm({
 
   /** Toggle check for each prompt */
   function handleCheck(promptType) {
+    setIsSubmitted(false);
     switch (promptType) {
       case field1:
         setField1Prompt((prevState) => ({
@@ -55,7 +57,6 @@ export function InputForm({
   async function handleClick(event) {
     event.preventDefault();
     resetResults();
-    console.log("WHAT??");
 
     if (field1Prompt.isChecked) {
       field1Prompt["type"] = field1;

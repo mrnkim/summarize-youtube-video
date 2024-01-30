@@ -106,7 +106,10 @@ export function VideoUrlUploadForm({
           className="videoUrlUploadInput"
           placeholder="https://www.youtube.com/"
         ></input>
-        <button className="videoUrlUploadButton" disabled={taskVideo}>
+        <button
+          className="videoUrlUploadButton"
+          disabled={taskVideo || inputRef.current?.value.length < 1}
+        >
           Upload
         </button>
       </form>

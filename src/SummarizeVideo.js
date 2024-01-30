@@ -34,6 +34,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
     isChecked: true,
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  console.log("🚀 > SummarizeVideo > isSubmitted=", isSubmitted);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   // const [resultLoading, setResultLoading] = useState(false);
   const [field1Result, setField1Result] = useState({});

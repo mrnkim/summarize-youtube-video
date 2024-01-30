@@ -159,13 +159,14 @@ export function useGenerateSummary(data, videoId, enabled) {
         `/videos/${videoId}/summarize`,
         { data }
       );
-      console.log("🚀 > queryFn: > response=", response)
+      console.log("🚀 > queryFn: > response=", response);
       const respData = response.data;
       return respData;
     },
     enabled: enabled,
   });
 }
+
 export function useGenerateChapters(data, videoId, enabled) {
   return useQuery({
     queryKey: [keys.VIDEOS, "chapters", videoId],

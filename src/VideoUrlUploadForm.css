@@ -38,6 +38,15 @@
     border: none;
 }
 
+.videoUrlUploadButton:hover:enabled {
+    cursor: pointer;
+    transform: scale(0.98);
+}
+
+.videoUrlUploadButton:disabled {
+    cursor: not-allowed;
+}
+
 .errorMessage {
     color: var(--TL-Red-500, #F44336);
     font-size: 14px;

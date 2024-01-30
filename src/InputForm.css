@@ -35,13 +35,17 @@
 
 .form {
     margin-top: 5px;
-    width: 381px;
+  width: 381px;
   }
 
 .checkbox-container input[type="checkbox"] {
     width: 12.8px;
     height: 12.8px;
     background-color: #FFACDE;
+}
+
+.checkbox-container input[type="checkbox"]:hover {
+  cursor: pointer;
 }
 
 .checkbox-container input[type="checkbox"]:checked {
@@ -62,6 +66,15 @@
     font-weight: 500;
     font-size: 16px;
     color: white;
+}
+
+.generateButton:disabled {
+    cursor:not-allowed;
+}
+
+.generateButton:hover:enabled {
+    cursor: pointer;
+    transform: scale(0.98);
 }
 
 .label {

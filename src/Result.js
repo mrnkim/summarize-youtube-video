@@ -21,6 +21,7 @@ import { ErrorBoundary } from "./ErrorBoundary";
 export function Result({
   video,
   isSubmitted,
+  setIsSubmitted,
   field1Prompt,
   field2Prompt,
   field3Prompt,
