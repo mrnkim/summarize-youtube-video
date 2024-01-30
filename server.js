@@ -1,8 +1,6 @@
 require("dotenv").config();
-
 const express = require("express");
 const app = express();
-
 const cors = require("cors");
 const ytdl = require("ytdl-core");
 const bodyParser = require("body-parser");
@@ -11,9 +9,6 @@ const axios = require("axios");
 /** Define constants and configure TL API endpoints */
 const TWELVE_LABS_API_KEY = process.env.REACT_APP_API_KEY;
 const API_BASE_URL = process.env.REACT_APP_API_URL;
-const TWELVE_LABS_API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-});
 const PORT_NUMBER = process.env.REACT_APP_PORT_NUMBER;
 
 /** Set up middleware for Express */
@@ -29,9 +24,7 @@ app.use(
 /** Define error handling middleware */
 const errorLogger = (error, request, response, next) => {
   console.error(error.stack);
-  response
-    .status(error.status || 500)
-    .json(error.message || "Something Went Wrong...");
+  next(error);
 };
 
 const errorHandler = (error, request, response, next) => {
@@ -51,33 +44,29 @@ app.listen(PORT_NUMBER, () => {
   console.log(`Server Running. Listening on port ${PORT_NUMBER}`);
 });
 
+const HEADERS = {
+  "Content-Type": "application/json",
+  "x-api-key": TWELVE_LABS_API_KEY,
+};
+
 /** Get videos */
 app.get("/indexes/:indexId/videos", async (request, response, next) => {
-  const headers = {
-    "Content-Type": "application/json",
-    "x-api-key": TWELVE_LABS_API_KEY,
-  };
-
   const params = {
     page_limit: request.query.page_limit,
   };
 
   try {
-    const apiResponse = await TWELVE_LABS_API.get(
-      `/indexes/${request.params.indexId}/videos`,
-      {
-        headers,
-        params,
-      }
-    );
+    const options = {
+      method: "GET",
+      url: `${API_BASE_URL}/indexes/${request.params.indexId}/videos`,
+      headers: { ...HEADERS },
+      data: { params },
+    };
+    const apiResponse = await axios.request(options);
     response.json(apiResponse.data);
   } catch (error) {
-    console.error("Error from TWELVE_LABS_API:", error);
-
-    // Modify the error object to include status and message
     const status = error.response?.status || 500;
-    const message = error.response?.data?.message || "Internal Server Error";
-
+    const message = error.response?.data?.message || "Error Getting Videos";
     return next({ status, message });
   }
 });
@@ -89,25 +78,17 @@ app.get(
     const indexId = request.params.indexId;
     const videoId = request.params.videoId;
 
-    const headers = {
-      "Content-Type": "application/json",
-      "x-api-key": TWELVE_LABS_API_KEY,
-    };
-
     try {
-      const apiResponse = await TWELVE_LABS_API.get(
-        `/indexes/${indexId}/videos/${videoId}`,
-        {
-          headers,
-        }
-      );
+      const options = {
+        method: "GET",
+        url: `${API_BASE_URL}/indexes/${indexId}/videos/${videoId}`,
+        headers: { ...HEADERS },
+      };
+      const apiResponse = await axios.request(options);
       response.json(apiResponse.data);
     } catch (error) {
-      console.error("Error from TWELVE_LABS_API:", error);
-      // Modify the error object to include status and message
       const status = error.response?.status || 500;
-      const message = error.response?.data?.message || "Internal Server Error";
-
+      const message = error.response?.data?.message || "Error Getting a Video";
       return next({ status, message });
     }
   }
@@ -116,27 +97,22 @@ app.get(
 /** Summarize a video */
 app.post("/videos/:videoId/summarize", async (request, response, next) => {
   const videoId = request.params.videoId;
-  console.log("🚀 > app.post > videoId=", videoId);
   let data = request.body.data;
-  console.log("🚀 > app.post > data=", data);
 
-  let headers = {
-    "Content-Type": "application/json",
-    "x-api-key": TWELVE_LABS_API_KEY,
-  };
-  //TODO: update URL
   try {
     const options = {
       method: "POST",
-      url: `https://api.twelvelabs.io/v1.2/summarize`,
-      headers: { ...headers, accept: "application/json" },
+      url: `${API_BASE_URL}/summarize`,
+      headers: { ...HEADERS, accept: "application/json" },
       data: { ...data, video_id: videoId },
     };
-    console.log("🚀 > app.post > options=", options);
     const apiResponse = await axios.request(options);
     response.json(apiResponse.data);
   } catch (error) {
-    return next(error);
+    const status = error.response?.status || 500;
+    const message =
+      error.response?.data?.message || "Error Summarizing a Video";
+    return next({ status, message });
   }
 });
 
@@ -148,52 +124,48 @@ app.get("/video-info", async (request, response, next) => {
     const videoInfo = await ytdl.getBasicInfo(videoId);
     response.json(videoInfo.videoDetails);
   } catch (error) {
-    return next(error);
+    const status = error.response?.status || 500;
+    const message =
+      error.response?.data?.message || "Error getting info of a video";
+    return next({ status, message });
   }
 });
 
 /** Index a Youtube video for analysis, returning a task ID */
 app.post("/index", async (request, response, next) => {
-  const headers = {
-    "content-type": "application/json",
-    "x-api-key": TWELVE_LABS_API_KEY,
-  };
-  console.log("🚀 > app.post > options.request.body=", request.body);
-
   const options = {
     method: "POST",
-    url: "https://api.twelvelabs.io/v1.2/tasks/external-provider",
-    headers: { ...headers, accept: "application/json" },
+    url: `${API_BASE_URL}/tasks/external-provider`,
+    headers: { ...HEADERS, accept: "application/json" },
     data: request.body.body,
   };
-  console.log("🚀 > app.post > options=", options);
 
   try {
     const apiResponse = await axios.request(options);
-    console.log("🚀 > app.post > apiResponse=", apiResponse);
     response.json(apiResponse.data);
   } catch (error) {
-    console.error("🚀 > app.post > error=", error.response || error.message);
-    response
-      .status(error.response?.status || 500)
-      .json({ error: error.message });
+    const status = error.response?.status || 500;
+    const message =
+      error.response?.data?.message || "Error indexing a YouTube Video";
+    return next({ status, message });
   }
 });
 
 /** Check the status of a specific indexing task */
 app.get("/tasks/:taskId", async (request, response, next) => {
   const taskId = request.params.taskId;
-  const headers = {
-    "Content-Type": "application/json",
-    "x-api-key": TWELVE_LABS_API_KEY,
-  };
 
   try {
-    const apiResponse = await TWELVE_LABS_API.get(`/tasks/${taskId}`, {
-      headers,
-    });
+    const options = {
+      method: "GET",
+      url: `${API_BASE_URL}/tasks/${taskId}`,
+      headers: { ...HEADERS },
+    };
+    const apiResponse = await axios.request(options);
     response.json(apiResponse.data);
   } catch (error) {
-    return next(error);
+    const status = error.response?.status || 500;
+    const message = error.response?.data?.message || "Error getting a task";
+    return next({ status, message });
   }
 });

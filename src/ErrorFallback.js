@@ -2,11 +2,12 @@ import React from "react";
 import WarningIcon from "./Warning.svg";
 import "./ErrorFallback.css";
 
-// TODO: Fix Styling
-// TODO: Add refetch to Go Back button
 /** Component to show when there is an error */
 function ErrorFallback({ error }) {
-  console.log("🚀 > ErrorFallback > error=", error)
+  function handleGoBack() {
+    window.location.reload();
+  }
+
   return (
     <div role="alert">
       <div className="warningMessageWrapper">
@@ -16,7 +17,9 @@ function ErrorFallback({ error }) {
         </div>
       </div>
       <div className="resetButtonWrapper">
-        <button className="resetButton">Go back</button>
+        <button className="resetButton" onClick={handleGoBack}>
+          Go back
+        </button>
       </div>
     </div>
   );
