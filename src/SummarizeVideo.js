@@ -34,7 +34,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
     isChecked: true,
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  console.log("🚀 > SummarizeVideo > isSubmitted=", isSubmitted);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
   // const [resultLoading, setResultLoading] = useState(false);
   const [field1Result, setField1Result] = useState({});
@@ -109,55 +108,53 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           resetPrompts={resetPrompts}
         />
       </div>
-      {video && !taskVideo && (
-        <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Video url={video.source?.url} />
-          </Suspense>
-        </ErrorBoundary>
-      )}
 
-      {!video && !taskVideo && <p>Please Upload a video</p>}
-      {!taskVideo && showVideoTitle && (
-        <div className="videoTitle">{vidTitleClean}</div>
-      )}
       {!taskVideo && (
-        <InputForm
-          video={video}
-          field1Prompt={field1Prompt}
-          setField1Prompt={setField1Prompt}
-          field2Prompt={field2Prompt}
-          setField2Prompt={setField2Prompt}
-          field3Prompt={field3Prompt}
-          setField3Prompt={setField3Prompt}
-          field1={field1}
-          field2={field2}
-          field3={field3}
-          setIsSubmitted={setIsSubmitted}
-          // resultLoading={resultLoading}
-          // setResultLoading={setResultLoading}
-          setShowVideoTitle={setShowVideoTitle}
-          resetResults={resetResults}
-        />
-      )}
-      {!taskVideo && (
-        <Result
-          video={video}
-          setIsSubmitted={setIsSubmitted}
-          isSubmitted={isSubmitted}
-          field1Prompt={field1Prompt}
-          field2Prompt={field2Prompt}
-          field3Prompt={field3Prompt}
-          // setResultLoading={setResultLoading}
-          // resultLoading={resultLoading}
-          resetResults={resetResults}
-          field1Result={field1Result}
-          field2Result={field2Result}
-          field3Result={field3Result}
-          setField1Result={setField1Result}
-          setField2Result={setField2Result}
-          setField3Result={setField3Result}
-        />
+        <>
+          <ErrorBoundary>
+            {isLoading || isFetching ? (
+              <LoadingSpinner />
+            ) : (
+              <Video url={video?.source?.url} />
+            )}
+          </ErrorBoundary>
+
+          {!video && <p>Please Upload a video</p>}
+
+          {showVideoTitle && <div className="videoTitle">{vidTitleClean}</div>}
+
+          <InputForm
+            video={video}
+            field1Prompt={field1Prompt}
+            setField1Prompt={setField1Prompt}
+            field2Prompt={field2Prompt}
+            setField2Prompt={setField2Prompt}
+            field3Prompt={field3Prompt}
+            setField3Prompt={setField3Prompt}
+            field1={field1}
+            field2={field2}
+            field3={field3}
+            setIsSubmitted={setIsSubmitted}
+            setShowVideoTitle={setShowVideoTitle}
+            resetResults={resetResults}
+          />
+
+          <Result
+            video={video}
+            setIsSubmitted={setIsSubmitted}
+            isSubmitted={isSubmitted}
+            field1Prompt={field1Prompt}
+            field2Prompt={field2Prompt}
+            field3Prompt={field3Prompt}
+            resetResults={resetResults}
+            field1Result={field1Result}
+            field2Result={field2Result}
+            field3Result={field3Result}
+            setField1Result={setField1Result}
+            setField2Result={setField2Result}
+            setField3Result={setField3Result}
+          />
+        </>
       )}
     </div>
   );

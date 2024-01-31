@@ -53,27 +53,3 @@
     font-size: 14px;
     margin-top: 15px;
 }
-
-.videoAndStatus {
-    text-transform: capitalize;
-    font-size: 14px;
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: center; */
-    /* text-align: center; */
-    margin-top: 10px;
-}
-
-/* @keyframes rotate {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-.loading-spinner {
-    margin: auto;
-    animation: rotate 2s linear infinite;
-  } */

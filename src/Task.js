@@ -1,13 +1,12 @@
 import { React, Suspense, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
 import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
 import { useGetTask } from "./apiHooks";
-import { ErrorBoundary } from "react-error-boundary";
 
 export function Task({ taskId, refetchVideos, setTaskVideo }) {
   const { data } = useGetTask(taskId);
-  console.log("🚀 > Task > data=", data);
 
   const queryClient = useQueryClient();
 
@@ -25,15 +24,13 @@ export function Task({ taskId, refetchVideos, setTaskVideo }) {
   }, [queryClient, keys.TASK, taskId]);
 
   return (
-    <div>
+    <div className="task">
       <LoadingSpinner />
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
-        <div className="videoAndStatus">
-
-          {data && data.status ? `${data.status}...` : null}
+          <div className="task__status">
+            {data && data.status ? `${data.status}...` : null}
           </div>
-
         </Suspense>
       </ErrorBoundary>
     </div>

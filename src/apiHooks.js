@@ -91,18 +91,15 @@ export function useGetVideo(indexId, videoId) {
         );
 
         if (response.data.error) {
-          // Handle explicit server-side errors
           throw new Error(response.data.error);
         }
 
-        // Assuming your server response has a `data` field
         return response.data;
       } catch (error) {
         throw error;
       }
     },
     onError: (error) => {
-      // Handle errors specific to the useQuery hook
       console.error("useGetVideo hook error:", error);
     },
   });

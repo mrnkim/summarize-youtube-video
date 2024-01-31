@@ -1,6 +1,10 @@
 
 .LoadingSpinner {
     margin: 0.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
   }
 
 .LoadingSpinner__wrapper {
@@ -15,4 +19,8 @@
     100% {
       transform: rotate(360deg);
     }
+  }
+
+  .LoadingSpinner__img {
+    width: 100%;
   }
