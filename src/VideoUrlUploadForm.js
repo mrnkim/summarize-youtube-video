@@ -99,15 +99,19 @@ export function VideoUrlUploadForm({
 
   return (
     <div className="videoUrlUploadForm">
-      <div className="title">Upload video</div>
-      <form onChange={handleChange} onSubmit={handleSubmit}>
+      <div className="videoUrlUploadForm__title">Upload video</div>
+      <form
+        className="videoUrlUploadForm__form"
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      >
         <input
+          className="videoUrlUploadForm__form__input"
           ref={setInputRef}
-          className="videoUrlUploadInput"
           placeholder="https://www.youtube.com/"
         ></input>
         <button
-          className="videoUrlUploadButton"
+          className="videoUrlUploadForm__form__button"
           disabled={taskVideo || inputRef.current?.value.length < 1}
         >
           Upload
@@ -116,9 +120,11 @@ export function VideoUrlUploadForm({
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
           {taskVideo && (
-            <div>
+            <div className="videoUrlUploadForm__taskVideoWrapper">
               <Video url={taskVideo.video_url} />
-              {!taskId && "Submitting..."}
+              <div className="videoUrlUploadForm__taskVideoWrapper__message">
+                {!taskId && "Submitting..."}
+              </div>
               {taskId && (
                 <Task
                   taskId={taskId}
@@ -131,8 +137,7 @@ export function VideoUrlUploadForm({
           )}
         </Suspense>
       </ErrorBoundary>
-
-      {error && <div className="errorMessage">{error}</div>}
+      {error && <div className="videoUrlUploadForm_errorMessage">{error}</div>}
     </div>
   );
 }

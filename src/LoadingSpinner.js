@@ -1,10 +1,15 @@
 import loadingSpinner from "./LoadingSpinner.svg";
+import "./LoadingSpinner.css";
 
 function LoadingSpinner() {
   return (
-    <div className="loading-spinner-wrapper">
-      <div className=" loading-spinner">
-        <img src={loadingSpinner} alt="Loading Spinner" />
+    <div className="LoadingSpinner">
+      <div className="LoadingSpinner__wrapper">
+        <img
+          className="LoadingSpinner__img"
+          src={loadingSpinner}
+          alt="Loading Spinner"
+        />
       </div>
     </div>
   );

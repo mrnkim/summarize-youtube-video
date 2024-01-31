@@ -25,11 +25,15 @@ export function Task({ taskId, refetchVideos, setTaskVideo }) {
   }, [queryClient, keys.TASK, taskId]);
 
   return (
-    <div className="videoAndStatus">
+    <div>
       <LoadingSpinner />
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
+        <div className="videoAndStatus">
+
           {data && data.status ? `${data.status}...` : null}
+          </div>
+
         </Suspense>
       </ErrorBoundary>
     </div>
