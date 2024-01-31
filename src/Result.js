@@ -139,8 +139,9 @@ export function Result({
                         {formatTime(highlight.end)}
                       </div>
                       <TitleAndSummary
-                        summary={highlight.highlight_summary}
-                        title={highlight.highlight}
+                        summary={
+                          highlight.highlight_summary || highlight.highlight
+                        }
                       />
                     </div>
                   </div>
