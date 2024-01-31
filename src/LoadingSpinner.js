@@ -3,10 +3,10 @@ import "./LoadingSpinner.css";
 
 function LoadingSpinner() {
   return (
-    <div className="LoadingSpinner">
-      <div className="LoadingSpinner__wrapper">
+    <div className="loadingSpinner">
+      <div className="loadingSpinner__wrapper">
         <img
-          className="LoadingSpinner__img"
+          className="loadingSpinner__img"
           src={loadingSpinner}
           alt="Loading Spinner"
         />

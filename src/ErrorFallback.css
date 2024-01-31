@@ -1,4 +1,4 @@
-.warningMessageWrapper {
+.errorFallback__warningMessageWrapper {
     margin-top: 1rem;
     margin-bottom: 1rem;
     display: flex;
@@ -15,7 +15,7 @@
     margin-right: auto;
   }
 
-  .warningMessage {
+  .errorFallback__warningMessageWrapper__warningMessage {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,9 +26,15 @@
     font-style: normal;
     font-weight: 400;
     line-height: 1.25rem;
-      }
+  }
 
-  .resetButton {
+  .errorFallback__resetButtonWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .errorFallback__resetButtonWrapper__resetButton {
     padding: 10px 12px;
     align-items: center;
     background: #F44336;
@@ -38,8 +44,4 @@
     margin-bottom: 3rem;
   }
 
-  .resetButtonWrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-  }
+

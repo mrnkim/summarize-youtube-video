@@ -11,6 +11,7 @@ function App() {
   const INDEX_ID = process.env.REACT_APP_INDEX_ID;
 
   const { data, refetch: refetchVideos } = useGetVideos(INDEX_ID);
+
   const queryClient = useQueryClient();
 
   useEffect(() => {

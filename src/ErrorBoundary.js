@@ -12,14 +12,11 @@ export class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    console.log("🚀 > ErrorBoundary > componentDidCatch > error=", error);
     console.error(info.componentStack);
   }
 
   render() {
     if (this.state.hasError) {
-      console.log("🚀 > ErrorBoundary > render > this.state=", this.state);
-      // You can render any custom fallback UI or error message here
       return <ErrorFallback error={this.state.error} />;
     }
 

@@ -29,6 +29,7 @@ export function InputForm({
   /** Toggle check for each prompt */
   function handleCheck(promptType) {
     setIsSubmitted(false);
+
     switch (promptType) {
       case field1:
         setField1Prompt((prevState) => ({
@@ -61,17 +62,16 @@ export function InputForm({
     if (field1Prompt.isChecked) {
       field1Prompt["type"] = field1;
     }
-
     if (field2Prompt.isChecked) {
       field2Prompt["type"] = field2;
     }
-
     if (field3Prompt.isChecked) {
       field3Prompt["type"] = field3;
     }
 
     setIsSubmitted(true);
     setShowVideoTitle(true);
+
     queryClient.invalidateQueries([
       keys.VIDEOS,
       video._id,
@@ -83,48 +83,60 @@ export function InputForm({
 
   return (
     <div className="inputForm">
-      <div className="title">Choose a summary format</div>
-      <form className="form">
-        <div className="checkboxes">
-          <div className="checkbox-container">
+      <div className="inputForm__title">Choose a summary format</div>
+      <form className="inputForm__form">
+        <div className="inputForm__form__checkboxes">
+          <div className="inputForm__form__checkboxes__wrapper">
             <input
+              className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
               id={field1}
               name={field1}
               checked={field1Prompt.isChecked}
               onChange={() => handleCheck(field1)}
             />
-            <label className="label" htmlFor={field1}>
+            <label
+              className="inputForm__form__checkboxes__wrapper__label"
+              htmlFor={field1}
+            >
               {field1}
             </label>
           </div>
-          <div className="checkbox-container">
+          <div className="inputForm__form__checkboxes__wrapper">
             <input
+              className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
               id={field2}
               name={field2}
               checked={field2Prompt.isChecked}
               onChange={() => handleCheck(field2)}
             />
-            <label className="label" htmlFor={field2}>
+            <label
+              className="inputForm__form__checkboxes__wrapper__label"
+              htmlFor={field2}
+            >
               {field2}s
             </label>
           </div>
-          <div className="checkbox-container">
+          <div className="inputForm__form__checkboxes__wrapper">
             <input
+              className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
               id={field3}
               name={field3}
               checked={field3Prompt.isChecked}
               onChange={() => handleCheck(field3)}
             />
-            <label className="label" htmlFor={field3}>
+            <label
+              className="inputForm__form__checkboxes__wrapper__label"
+              htmlFor={field3}
+            >
               {field3}
             </label>
           </div>
         </div>
         <button
-          className="generateButton"
+          className="inputForm__form__button"
           onClick={handleClick}
           disabled={
             !field1Prompt.isChecked &&

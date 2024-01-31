@@ -1,5 +1,4 @@
-
-.LoadingSpinner {
+.loadingSpinner {
     margin: 0.2rem;
     display: flex;
     justify-content: center;
@@ -7,7 +6,7 @@
     height: 100%;
   }
 
-.LoadingSpinner__wrapper {
+.loadingSpinner__wrapper {
     animation: rotate 2s linear infinite;
     padding: 0.2rem;
   }
@@ -21,6 +20,6 @@
     }
   }
 
-  .LoadingSpinner__img {
+  .loadingSpinner__img {
     width: 100%;
   }

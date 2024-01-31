@@ -1,60 +1,59 @@
-.title {
+.inputForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 381px;
+    margin-top: 60px;
+}
+
+.inputForm__title {
     font-weight: 700;
     font-size: 16px;
 }
 
-.checkboxes {
+.inputForm__form {
+    margin-top: 20px;
+    width: 381px;
+}
+
+.inputForm__form__checkboxes {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
 
-.checkbox-container {
+.inputForm__form__checkboxes__wrapper {
     margin: 0;
     padding: 0;
   }
 
-.checkbox-container input[type="checkbox"],
-.checkbox-container label {
-    margin: 0;
-    padding: 0;
-  }
-
-.checkbox-container label {
+.inputForm__form__checkboxes__wrapper__label {
     margin-left: 5px;
+    text-transform: capitalize;
+    margin: 0;
+    padding: 0;
   }
 
-.inputForm{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        width: 381px;
-        margin-top: 60px;
-  }
-
-.form {
-    margin-top: 5px;
-  width: 381px;
-  }
-
-.checkbox-container input[type="checkbox"] {
+.inputForm__form__checkboxes__wrapper__checkbox {
     width: 12.8px;
     height: 12.8px;
     background-color: #FFACDE;
+    margin: 0;
+    padding: 0;
+  }
+
+.inputForm__form__checkboxes__wrapper__checkbox:hover {
+    cursor: pointer;
 }
 
-.checkbox-container input[type="checkbox"]:hover {
-  cursor: pointer;
-}
-
-.checkbox-container input[type="checkbox"]:checked {
+.inputForm__form__checkboxes__wrapper__checkbox:checked {
     width: 12.8px;
     height: 12.8px;
     accent-color: #FF0099 ;
     }
 
-.generateButton {
+.inputForm__form__button {
     margin-top: 30px;
     background-color: #FF0099;
     width: 381px;
@@ -68,15 +67,11 @@
     color: white;
 }
 
-.generateButton:disabled {
+.inputForm__form__button:disabled {
     cursor:not-allowed;
 }
 
-.generateButton:hover:enabled {
+.inputForm__form__button:hover:enabled {
     cursor: pointer;
     transform: scale(0.98);
-}
-
-.label {
-    text-transform: capitalize;
 }
