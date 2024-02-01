@@ -21,7 +21,6 @@ import { ErrorBoundary } from "./ErrorBoundary";
 export function Result({
   video,
   isSubmitted,
-  setIsSubmitted,
   field1Prompt,
   field2Prompt,
   field3Prompt,
@@ -68,10 +67,12 @@ export function Result({
     <ErrorBoundary>
       <div className="result">
         {field1Prompt.isChecked && isSubmitted && (
-          <div className="resultSection">
-            <h2>Sentences</h2>
+          <div className="result__summary">
+            <h2 className="result__summary__title">Sentences</h2>
             {field1Result ? (
-              <div>{field1Result.summary}</div>
+              <div className="result__summary__summary">
+                {field1Result.summary}
+              </div>
             ) : (
               <LoadingSpinner />
             )}
@@ -79,14 +80,14 @@ export function Result({
         )}
 
         {field2Prompt.isChecked && isSubmitted && (
-          <div className="resultSection">
-            <h2>Chapters</h2>
-            <div>
+          <div className="result__chapters">
+            <h2 className="result__chapters__title">Chapters</h2>
+            <div className="result__chapters__wrapper">
               {field2Result &&
                 Array.isArray(field2Result.chapters) &&
                 field2Result.chapters.map((chapter) => (
                   <div
-                    className="videoAndDescription"
+                    className="result__chapters__wrapper__chapter"
                     key={chapter.chapter_title}
                   >
                     <Video
@@ -94,23 +95,27 @@ export function Result({
                       start={chapter.start}
                       end={chapter.end}
                     />
-                    <div className="titleAndSummary">
-                      <div className="titleAndTimeStamp">
-                        <div className="titleSummary">
+                    <div className="result__chapters__wrapper__chapter__wrapper">
+                      <div className="result__chapters__wrapper__chapter__wrapper_titleTime">
+                        <div className="result__chapters__wrapper__chapter__wrapper_titleTime_title">
                           {" "}
                           {chapter.chapter_title}
                         </div>
-                        <div className="timeStamp">
+                        <div className="result__chapters__wrapper__chapter__wrapper_titleTime_time">
                           {formatTime(chapter.start)} -{" "}
                           {formatTime(chapter.end)}
                         </div>
                       </div>
-                      <div className="summary">{chapter.chapter_summary}</div>
+                      <div className="result__chapters__wrapper__chapter__wrapper__summary">
+                        {chapter.chapter_summary}
+                      </div>
                     </div>
                   </div>
                 ))}
               {field2Result && !field2Result.chapters && (
-                <p>No chapters available</p>
+                <p className="result__chapters__wrapper__message">
+                  No chapters available
+                </p>
               )}
               {!field2Result && <LoadingSpinner />}
             </div>
@@ -118,14 +123,14 @@ export function Result({
         )}
 
         {field3Prompt.isChecked && isSubmitted && (
-          <div className="resultSection">
-            <h2>Highlights</h2>
-            <div>
+          <div className="result__highlights">
+            <h2 className="result__highlights__title">Highlights</h2>
+            <div className="result__highlights__wrapper">
               {field3Result &&
                 Array.isArray(field3Result.highlights) &&
                 field3Result.highlights.map((highlight) => (
                   <div
-                    className="videoAndDescription"
+                    className="result__highlights__wrapper__highlight"
                     key={highlight.highlight}
                   >
                     <Video
@@ -133,8 +138,8 @@ export function Result({
                       start={highlight.start}
                       end={highlight.end}
                     />
-                    <div className="titleAndSummary">
-                      <div className="timeStamp">
+                    <div className="result__highlights__wrapper__highlight__timeSummary">
+                      <div className="result__highlights__wrapper__highlight__timeSummary__time">
                         {formatTime(highlight.start)} -{" "}
                         {formatTime(highlight.end)}
                       </div>
@@ -147,7 +152,9 @@ export function Result({
                   </div>
                 ))}
               {field3Result && !field3Result.highlights && (
-                <p>No highlights available</p>
+                <p className="result__highlights__wrapper__message">
+                  No highlights available
+                </p>
               )}
               {!field3Result && <LoadingSpinner />}
             </div>
