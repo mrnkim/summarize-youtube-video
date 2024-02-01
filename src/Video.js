@@ -12,28 +12,12 @@ import "./Video.css";
 export function Video({ url, start, end }) {
   return (
     <div className="video">
-      {!start && !end && (
-        <ReactPlayer
-          key={url}
-          className="react-player"
-          url={url}
-          controls
-          config={{
-            hlsOptions: {
-              startPosition: start,
-              endPosition: end,
-            },
-          }}
-        />
-      )}
-      {(start || end) && (
-        <ReactPlayer
-          key={url}
-          className="react-player"
-          url={`${url}?start=${start}&end=${end}`}
-          controls
-        />
-      )}
+      <ReactPlayer
+        key={url}
+        className="video__reactPlayer"
+        url={start || end ? `${url}?start=${start}&end=${end}` : url}
+        controls
+      />
     </div>
   );
 }
