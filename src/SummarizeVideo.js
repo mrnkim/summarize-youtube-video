@@ -1,4 +1,4 @@
-import { React, useState, useEffect, Suspense } from "react";
+import { React, useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Video } from "./Video";
 import { InputForm } from "./InputForm";
@@ -21,8 +21,8 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
     data: video,
     refetch: refetchVideo,
     isLoading,
-    isFetching,
   } = useGetVideo(index, videoId);
+
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
     isChecked: true,
@@ -35,12 +35,11 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
-  // const [resultLoading, setResultLoading] = useState(false);
   const [field1Result, setField1Result] = useState({});
   const [field2Result, setField2Result] = useState({});
   const [field3Result, setField3Result] = useState({});
-
   const [taskVideo, setTaskVideo] = useState(null);
+
   const queryClient = useQueryClient();
 
   const vidTitleRaw = video?.metadata?.video_title;
@@ -96,33 +95,31 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
 
   return (
     <div className="summarizeVideo">
-      <h1 className="appTitle">Summarize a Youtube Video</h1>
-      <div className="videoUrlUploadForm">
-        <VideoUrlUploadForm
-          setTaskVideo={setTaskVideo}
-          taskVideo={taskVideo}
-          index={index}
-          refetchVideos={refetchVideos}
-          refetchVideo={refetchVideo}
-          resetResults={resetResults}
-          resetPrompts={resetPrompts}
-        />
-      </div>
-
+      <h1 className="summarizeVideo__appTitle">Summarize a Youtube Video</h1>
+      <VideoUrlUploadForm
+        setTaskVideo={setTaskVideo}
+        taskVideo={taskVideo}
+        index={index}
+        refetchVideos={refetchVideos}
+        refetchVideo={refetchVideo}
+        resetResults={resetResults}
+        resetPrompts={resetPrompts}
+      />
       {!taskVideo && (
         <>
           <ErrorBoundary>
-            {isLoading || isFetching ? (
+            {isLoading ? (
               <LoadingSpinner />
             ) : (
               <Video url={video?.source?.url} />
             )}
           </ErrorBoundary>
-
-          {!video && <p>Please Upload a video</p>}
-
-          {showVideoTitle && <div className="videoTitle">{vidTitleClean}</div>}
-
+          {!video && (
+            <p className="summarizeVideo__message">Please Upload a video</p>
+          )}
+          {showVideoTitle && (
+            <div className="summarizeVideo__videoTitle">{vidTitleClean}</div>
+          )}
           <InputForm
             video={video}
             field1Prompt={field1Prompt}
@@ -138,7 +135,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
             setShowVideoTitle={setShowVideoTitle}
             resetResults={resetResults}
           />
-
           <Result
             video={video}
             setIsSubmitted={setIsSubmitted}

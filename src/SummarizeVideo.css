@@ -5,15 +5,15 @@
     gap: 15px;
 }
 
-.appTitle {
+.summarizeVideo__appTitle {
     font-size: 32px;
     font-weight: 500;
-  }
+}
 
-  .videoTitle {
+  .summarizeVideo__videoTitle {
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
     letter-spacing: 0em;
     text-align: center;
-  }
+}

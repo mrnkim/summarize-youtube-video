@@ -29,7 +29,6 @@
   }
 
 .inputForm__form__checkboxes__wrapper__label {
-    margin-left: 5px;
     text-transform: capitalize;
     margin: 0;
     padding: 0;
@@ -39,7 +38,7 @@
     width: 12.8px;
     height: 12.8px;
     background-color: #FFACDE;
-    margin: 0;
+    margin-right: 8px;
     padding: 0;
   }
 

@@ -57,7 +57,7 @@ export function InputForm({
   /** Combine user input and make API call(s)  */
   async function handleClick(event) {
     event.preventDefault();
-    resetResults();
+    // resetResults();
 
     if (field1Prompt.isChecked) {
       field1Prompt["type"] = field1;
