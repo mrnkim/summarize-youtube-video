@@ -35,9 +35,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
-  const [field1Result, setField1Result] = useState({});
-  const [field2Result, setField2Result] = useState({});
-  const [field3Result, setField3Result] = useState({});
   const [taskVideo, setTaskVideo] = useState(null);
 
   const queryClient = useQueryClient();
@@ -52,22 +49,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
       .replace(/%20/g, " ")
       .replace(/\([^)]*\)/g, "");
     return cleanedFilename;
-  }
-
-  /** Empty result(s) */
-  async function resetResults() {
-    setField1Result({
-      id: null,
-      summary: "",
-    });
-    setField2Result({
-      id: null,
-      chapters: "",
-    });
-    setField3Result({
-      id: null,
-      highlights: "",
-    });
   }
 
   async function resetPrompts() {
@@ -89,7 +70,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
       });
       await refetchVideo();
     };
-
     fetchData();
   }, [index, videoId, queryClient, refetchVideo]);
 
@@ -101,8 +81,6 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
         taskVideo={taskVideo}
         index={index}
         refetchVideos={refetchVideos}
-        refetchVideo={refetchVideo}
-        resetResults={resetResults}
         resetPrompts={resetPrompts}
       />
       {!taskVideo && (
@@ -111,7 +89,11 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
             {isLoading ? (
               <LoadingSpinner />
             ) : (
-              <Video url={video?.source?.url} />
+              <Video
+                url={video?.source?.url}
+                width={"381px"}
+                height={"214px"}
+              />
             )}
           </ErrorBoundary>
           {!video && (
@@ -133,22 +115,13 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
             field3={field3}
             setIsSubmitted={setIsSubmitted}
             setShowVideoTitle={setShowVideoTitle}
-            resetResults={resetResults}
           />
           <Result
             video={video}
-            setIsSubmitted={setIsSubmitted}
             isSubmitted={isSubmitted}
             field1Prompt={field1Prompt}
             field2Prompt={field2Prompt}
             field3Prompt={field3Prompt}
-            resetResults={resetResults}
-            field1Result={field1Result}
-            field2Result={field2Result}
-            field3Result={field3Result}
-            setField1Result={setField1Result}
-            setField2Result={setField2Result}
-            setField3Result={setField3Result}
           />
         </>
       )}

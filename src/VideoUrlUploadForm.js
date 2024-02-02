@@ -11,7 +11,6 @@ import { ErrorBoundary } from "./ErrorBoundary";
 const SERVER_BASE_URL = new URL(
   `${process.env.REACT_APP_SERVER_URL}:${process.env.REACT_APP_PORT_NUMBER}`
 );
-const VIDEO_INFO_URL = new URL("/video-info", SERVER_BASE_URL);
 const INDEX_VIDEO = new URL("/index", SERVER_BASE_URL);
 
 /** Receive user's video file, submit it to API, and show task status
@@ -25,18 +24,18 @@ export function VideoUrlUploadForm({
   taskVideo,
   index,
   refetchVideos,
-  resetResults,
   resetPrompts,
 }) {
   const [videoUrl, setVideoUrl] = useState(null);
   const [taskId, setTaskId] = useState(null);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
-  const queryClient = useQueryClient();
 
   const setInputRef = (ref) => {
     inputRef.current = ref;
   };
+
+  const queryClient = useQueryClient();
 
   /** Update user input (video Url) in real-time */
   function handleChange(evt) {
@@ -84,7 +83,6 @@ export function VideoUrlUploadForm({
       setTaskVideo(videoInfo);
       inputRef.current.value = "";
       resetPrompts();
-      resetResults();
     } catch (error) {
       setError(error.message);
     }
@@ -93,7 +91,6 @@ export function VideoUrlUploadForm({
   useEffect(() => {
     if (taskVideo) {
       indexYouTubeVideo();
-      resetResults();
     }
   }, [taskVideo]);
 

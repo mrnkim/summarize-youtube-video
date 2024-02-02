@@ -4,7 +4,6 @@ import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
-  useIsFetching,
 } from "@tanstack/react-query";
 import keys from "./keys";
 import apiConfig from "./apiConfig";
@@ -149,14 +148,13 @@ export function useGenerateSummary(data, videoId, enabled) {
     queryKey: [keys.VIDEOS, "summarize", videoId],
     queryFn: async () => {
       if (!enabled) {
-        return null; // Return null or any placeholder value when not enabled
+        return null;
       }
 
       const response = await apiConfig.SERVER.post(
         `/videos/${videoId}/summarize`,
         { data }
       );
-      console.log("🚀 > queryFn: > response=", response);
       const respData = response.data;
       return respData;
     },
@@ -169,7 +167,7 @@ export function useGenerateChapters(data, videoId, enabled) {
     queryKey: [keys.VIDEOS, "chapters", videoId],
     queryFn: async () => {
       if (!enabled) {
-        return null; // Return null or any placeholder value when not enabled
+        return null;
       }
 
       const response = await apiConfig.SERVER.post(
@@ -182,12 +180,13 @@ export function useGenerateChapters(data, videoId, enabled) {
     enabled: enabled,
   });
 }
+
 export function useGenerateHighlights(data, videoId, enabled) {
   return useQuery({
     queryKey: [keys.VIDEOS, "highlights", videoId],
     queryFn: async () => {
       if (!enabled) {
-        return null; // Return null or any placeholder value when not enabled
+        return null;
       }
 
       const response = await apiConfig.SERVER.post(

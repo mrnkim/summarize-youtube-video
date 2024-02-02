@@ -2,14 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden !important;
-  width: 381px;
-  height: 214px;
 }
 
 .video__reactPlayer {
-  max-width: 276px;
-  max-height: 150px;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 

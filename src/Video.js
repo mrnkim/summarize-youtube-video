@@ -9,9 +9,9 @@ import "./Video.css";
  *
  */
 
-export function Video({ url, start, end }) {
+export function Video({ url, start, end, width, height }) {
   return (
-    <div className="video">
+    <div className="video" style={{ width: width, height: height }}>
       <ReactPlayer
         key={url}
         className="video__reactPlayer"

@@ -6,6 +6,7 @@ const SERVER_BASE_URL = new URL(
 
 const apiConfig = {
   PAGE_LIMIT: 1,
+  INDEX_ID: process.env.REACT_APP_INDEX_ID,
   SERVER: axios.create({
     baseURL: SERVER_BASE_URL.toString(),
   }),

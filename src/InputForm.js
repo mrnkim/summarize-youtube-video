@@ -2,7 +2,6 @@ import { React } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import keys from "./keys";
 import "./InputForm.css";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 /** Receive user's check prompt for the API call
  *
@@ -22,7 +21,6 @@ export function InputForm({
   field3,
   setIsSubmitted,
   setShowVideoTitle,
-  resetResults,
 }) {
   const queryClient = useQueryClient();
 
@@ -57,7 +55,6 @@ export function InputForm({
   /** Combine user input and make API call(s)  */
   async function handleClick(event) {
     event.preventDefault();
-    // resetResults();
 
     if (field1Prompt.isChecked) {
       field1Prompt["type"] = field1;

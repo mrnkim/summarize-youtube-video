@@ -57,12 +57,12 @@ export function Result({
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
     const seconds = Math.floor(timeInSeconds % 60);
-
     const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     return formattedTime;
   }
+
   return (
     <ErrorBoundary>
       <div className="result">
@@ -78,7 +78,6 @@ export function Result({
             )}
           </div>
         )}
-
         {field2Prompt.isChecked && isSubmitted && (
           <div className="result__chapters">
             <h2 className="result__chapters__title">Chapters</h2>
@@ -94,6 +93,8 @@ export function Result({
                       url={video.source.url}
                       start={chapter.start}
                       end={chapter.end}
+                      width={"221px"}
+                      height={"120px"}
                     />
                     <div className="result__chapters__wrapper__chapter__wrapper">
                       <div className="result__chapters__wrapper__chapter__wrapper_titleTime">
@@ -121,7 +122,6 @@ export function Result({
             </div>
           </div>
         )}
-
         {field3Prompt.isChecked && isSubmitted && (
           <div className="result__highlights">
             <h2 className="result__highlights__title">Highlights</h2>
@@ -137,6 +137,8 @@ export function Result({
                       url={video.source.url}
                       start={highlight.start}
                       end={highlight.end}
+                      width={"221px"}
+                      height={"120px"}
                     />
                     <div className="result__highlights__wrapper__highlight__timeSummary">
                       <div className="result__highlights__wrapper__highlight__timeSummary__time">
