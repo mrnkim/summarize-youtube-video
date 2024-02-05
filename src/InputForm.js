@@ -87,6 +87,7 @@ export function InputForm({
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
+              data-cy="data-cy-checkbox-summary"
               id={field1}
               name={field1}
               checked={field1Prompt.isChecked}
@@ -103,6 +104,7 @@ export function InputForm({
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
+              data-cy="data-cy-checkbox-chapters"
               id={field2}
               name={field2}
               checked={field2Prompt.isChecked}
@@ -119,6 +121,7 @@ export function InputForm({
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
+              data-cy="data-cy-checkbox-highlights"
               id={field3}
               name={field3}
               checked={field3Prompt.isChecked}
@@ -134,6 +137,7 @@ export function InputForm({
         </div>
         <button
           className="inputForm__form__button"
+          data-cy="data-cy-generate-button"
           onClick={handleClick}
           disabled={
             !field1Prompt.isChecked &&

@@ -27,25 +27,31 @@ export function Result({
 }) {
   const { data: field1Result } = useGenerateSummary(
     field1Prompt,
-    video._id,
-    Boolean(field1Prompt.type && field1Prompt.isChecked && isSubmitted)
+    video?._id,
+    Boolean(
+      video?._id && field1Prompt.type && field1Prompt.isChecked && isSubmitted
+    )
   );
   const { data: field2Result } = useGenerateChapters(
     field2Prompt,
-    video._id,
-    Boolean(field2Prompt.type && field2Prompt.isChecked && isSubmitted)
+    video?._id,
+    Boolean(
+      video?._id && field2Prompt.type && field2Prompt.isChecked && isSubmitted
+    )
   );
   const { data: field3Result } = useGenerateHighlights(
     field3Prompt,
-    video._id,
-    Boolean(field3Prompt.type && field3Prompt.isChecked && isSubmitted)
+    video?._id,
+    Boolean(
+      video?._id && field3Prompt.type && field3Prompt.isChecked && isSubmitted
+    )
   );
   const queryClient = useQueryClient();
 
   useEffect(() => {
     queryClient.invalidateQueries([
       keys.VIDEOS,
-      video._id,
+      video?._id,
       "summarize",
       "chapters",
       "highlights",

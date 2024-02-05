@@ -9,6 +9,7 @@ import { useGetVideo } from "./apiHooks";
 import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
 import { ErrorBoundary } from "./ErrorBoundary";
+import WarningIcon from "./Warning_Green.svg";
 
 /** Summarize a Video App
  *
@@ -17,11 +18,13 @@ import { ErrorBoundary } from "./ErrorBoundary";
  */
 
 export function SummarizeVideo({ index, videoId, refetchVideos }) {
+  console.log("🚀 > SummarizeVideo > videoId=", videoId);
   const {
     data: video,
     refetch: refetchVideo,
     isLoading,
-  } = useGetVideo(index, videoId);
+  } = useGetVideo(index, videoId, Boolean(videoId));
+  console.log("🚀 > SummarizeVideo > video=", video);
 
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
@@ -68,10 +71,9 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
       await queryClient.invalidateQueries({
         queryKey: [keys.VIDEOS, index, videoId],
       });
-      await refetchVideo();
     };
     fetchData();
-  }, [index, videoId, queryClient, refetchVideo]);
+  }, [index, videoId, queryClient]);
 
   return (
     <div className="summarizeVideo">
@@ -83,12 +85,25 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
         refetchVideos={refetchVideos}
         resetPrompts={resetPrompts}
       />
+      {!video && (
+        <div className="summarizeVideo__messageWrapper">
+          <img
+            className="summarizeVideo__messageWrapper__warningIcon"
+            src={WarningIcon}
+            alt="WarningIcon"
+          ></img>
+          <div>
+            <p className="summarizeVideo__messageWrapper__message">
+              Please upload a video
+            </p>
+          </div>
+        </div>
+      )}
       {!taskVideo && (
         <>
           <ErrorBoundary>
-            {isLoading ? (
-              <LoadingSpinner />
-            ) : (
+            {isLoading && <LoadingSpinner />}
+            {video && (
               <Video
                 url={video?.source?.url}
                 width={"381px"}
@@ -96,33 +111,34 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
               />
             )}
           </ErrorBoundary>
-          {!video && (
-            <p className="summarizeVideo__message">Please upload a video</p>
-          )}
           {showVideoTitle && (
             <div className="summarizeVideo__videoTitle">{vidTitleClean}</div>
           )}
-          <InputForm
-            video={video}
-            field1Prompt={field1Prompt}
-            setField1Prompt={setField1Prompt}
-            field2Prompt={field2Prompt}
-            setField2Prompt={setField2Prompt}
-            field3Prompt={field3Prompt}
-            setField3Prompt={setField3Prompt}
-            field1={field1}
-            field2={field2}
-            field3={field3}
-            setIsSubmitted={setIsSubmitted}
-            setShowVideoTitle={setShowVideoTitle}
-          />
-          <Result
-            video={video}
-            isSubmitted={isSubmitted}
-            field1Prompt={field1Prompt}
-            field2Prompt={field2Prompt}
-            field3Prompt={field3Prompt}
-          />
+          {video && (
+            <InputForm
+              video={video}
+              field1Prompt={field1Prompt}
+              setField1Prompt={setField1Prompt}
+              field2Prompt={field2Prompt}
+              setField2Prompt={setField2Prompt}
+              field3Prompt={field3Prompt}
+              setField3Prompt={setField3Prompt}
+              field1={field1}
+              field2={field2}
+              field3={field3}
+              setIsSubmitted={setIsSubmitted}
+              setShowVideoTitle={setShowVideoTitle}
+            />
+          )}
+          {video && (
+            <Result
+              video={video}
+              isSubmitted={isSubmitted}
+              field1Prompt={field1Prompt}
+              field2Prompt={field2Prompt}
+              field3Prompt={field3Prompt}
+            />
+          )}
         </>
       )}
     </div>

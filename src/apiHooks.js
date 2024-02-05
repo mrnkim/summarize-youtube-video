@@ -80,11 +80,15 @@ export function useGetVideos(indexId) {
   });
 }
 
-export function useGetVideo(indexId, videoId) {
+export function useGetVideo(indexId, videoId, enabled) {
+  console.log("🚀 > useGetVideo > enabled=", enabled);
   return useQuery({
     queryKey: [keys.VIDEOS, indexId, videoId],
     queryFn: async () => {
       try {
+        if (!enabled) {
+          return null;
+        }
         const response = await apiConfig.SERVER.get(
           `${apiConfig.INDEXES_URL}/${indexId}/videos/${videoId}`
         );
@@ -98,6 +102,7 @@ export function useGetVideo(indexId, videoId) {
         throw error;
       }
     },
+    enabled: enabled,
     onError: (error) => {
       console.error("useGetVideo hook error:", error);
     },
@@ -123,25 +128,25 @@ export async function fetchVideoInfo(queryClient, url) {
   }
 }
 
-export async function fetchGenerateSummary(queryClient, data, videoId) {
-  try {
-    const response = await queryClient.fetchQuery({
-      queryKey: [keys.VIDEOS, "summarize", videoId],
-      queryFn: async () => {
-        const response = await apiConfig.SERVER.post(
-          `/videos/${videoId}/summarize`,
-          { data: data }
-        );
-        const respData = response.data;
-        return respData;
-      },
-    });
-    return response;
-  } catch (error) {
-    console.error("Error fetching next page of search results:", error);
-    throw error;
-  }
-}
+// export async function fetchGenerateSummary(queryClient, data, videoId) {
+//   try {
+//     const response = await queryClient.fetchQuery({
+//       queryKey: [keys.VIDEOS, "summarize", videoId],
+//       queryFn: async () => {
+//         const response = await apiConfig.SERVER.post(
+//           `/videos/${videoId}/summarize`,
+//           { data: data }
+//         );
+//         const respData = response.data;
+//         return respData;
+//       },
+//     });
+//     return response;
+//   } catch (error) {
+//     console.error("Error fetching next page of search results:", error);
+//     throw error;
+//   }
+// }
 
 export function useGenerateSummary(data, videoId, enabled) {
   return useQuery({
