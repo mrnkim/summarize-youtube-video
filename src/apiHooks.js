@@ -81,7 +81,6 @@ export function useGetVideos(indexId) {
 }
 
 export function useGetVideo(indexId, videoId, enabled) {
-  console.log("🚀 > useGetVideo > enabled=", enabled);
   return useQuery({
     queryKey: [keys.VIDEOS, indexId, videoId],
     queryFn: async () => {

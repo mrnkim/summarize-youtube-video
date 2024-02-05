@@ -8,5 +8,4 @@ module.exports = defineConfig({
       return config;
     },
   },
-  watchForFileChanges: false,
 });

@@ -18,13 +18,11 @@ import WarningIcon from "./Warning_Green.svg";
  */
 
 export function SummarizeVideo({ index, videoId, refetchVideos }) {
-  console.log("🚀 > SummarizeVideo > videoId=", videoId);
   const {
     data: video,
     refetch: refetchVideo,
     isLoading,
   } = useGetVideo(index, videoId, Boolean(videoId));
-  console.log("🚀 > SummarizeVideo > video=", video);
 
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
   const [field1Prompt, setField1Prompt] = useState({
