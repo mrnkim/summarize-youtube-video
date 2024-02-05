@@ -2,11 +2,11 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    e2e: {
-      baseUrl: "http://localhost:3000",
-    },
+    baseUrl: "http://localhost:3000",
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      require("@cypress/code-coverage/task")(on, config);
+      return config;
     },
   },
+  watchForFileChanges: false,
 });
