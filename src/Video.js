@@ -15,6 +15,7 @@ export function Video({ url, start, end, width, height }) {
       <ReactPlayer
         key={url}
         className="video__reactPlayer"
+        data-cy="data-cy-video"
         url={start || end ? `${url}?start=${start}&end=${end}` : url}
         controls
       />

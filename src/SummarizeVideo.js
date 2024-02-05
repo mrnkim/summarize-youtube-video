@@ -97,7 +97,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
             )}
           </ErrorBoundary>
           {!video && (
-            <p className="summarizeVideo__message">Please Upload a video</p>
+            <p className="summarizeVideo__message">Please upload a video</p>
           )}
           {showVideoTitle && (
             <div className="summarizeVideo__videoTitle">{vidTitleClean}</div>
