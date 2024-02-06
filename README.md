@@ -32,17 +32,17 @@ git clone git@github.com:mrnkim/summarize-youtube-video.git
 
 1. Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate your API Key
    - Once you sign up, you'll receive complimentary credits allowing you to index up to 10 hours of video content!
-2. Check the current API Base URL at [Twelve Labs API Reference](https://docs.twelvelabs.io/reference/api-reference) and update the version as needed
-3. Create an index and save the index id (Visit [Twelve Labs Docs](https://docs.twelvelabs.io/docs/create-indexes) for details)
-4. Create `.env` file at the root level and store/update the values of API_URL, API_KEY, and INDEX_ID.
+2. Create an index and save the index id (Visit [Twelve Labs Docs](https://docs.twelvelabs.io/docs/create-indexes) for details)
+3. Create `.env` file at the root level and store/update the values of SERVER_URL, PORT_NUMBER, API_URL, API_KEY, and INDEX_ID.
 
    ```
-
    .env
 
+    REACT_APP_SERVER_URL=<YOUR_SERVER_URL> //e.g., http://localhost
+    REACT_APP_PORT_NUMBER=<YOUR_PORT_NUMBER> //e.g., 4001
     REACT_APP_API_URL=https://api.twelvelabs.io/v1.2
-    REACT_APP_API_KEY=YOUR_API_KEY
-    REACT_APP_INDEX_ID=YOUR_INDEX_ID
+    REACT_APP_API_KEY=<YOUR_API_KEY>
+    REACT_APP_INDEX_ID=<YOUR_INDEX_ID>
 
    ```
 
@@ -65,7 +65,7 @@ git clone git@github.com:mrnkim/summarize-youtube-video.git
 
 ## 🎯 What's Next?
 
-- Add (or automate) test
+- Add tests
 - Improve error handling and add data validations
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
