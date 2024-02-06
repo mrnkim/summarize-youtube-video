@@ -12,11 +12,7 @@ const apiConfig = {
   }),
   INDEXES_URL: "/indexes",
   TASKS_URL: "/tasks",
-  JSON_VIDEO_INFO_URL: "/json-video-info",
-  CHANNEL_VIDEO_INFO_URL: "/channel-video-info",
-  PLAYLIST_VIDEO_INFO_URL: "/playlist-video-info",
-  DOWNLOAD_URL: "/download",
-  UPDATE_VIDEO_URL: "/update",
+  INDEX_VIDEO_URL: new URL("/index", SERVER_BASE_URL),
 };
 
 export default apiConfig;

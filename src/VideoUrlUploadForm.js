@@ -7,11 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { fetchVideoInfo } from "./apiHooks";
 import { Task } from "./Task";
 import { ErrorBoundary } from "./ErrorBoundary";
-
-const SERVER_BASE_URL = new URL(
-  `${process.env.REACT_APP_SERVER_URL}:${process.env.REACT_APP_PORT_NUMBER}`
-);
-const INDEX_VIDEO = new URL("/index", SERVER_BASE_URL);
+import apiConfig from "./apiConfig";
 
 /** Receive user's video file, submit it to API, and show task status
  *
@@ -58,12 +54,15 @@ export function VideoUrlUploadForm({
           index_id: index,
           url: taskVideo.video_url,
         };
-        const response = await axios.post(INDEX_VIDEO.toString(), {
-          headers: {
-            "content-type": "application/json",
-          },
-          body: data,
-        });
+        const response = await axios.post(
+          apiConfig.INDEX_VIDEO_URL.toString(),
+          {
+            headers: {
+              "content-type": "application/json",
+            },
+            body: data,
+          }
+        );
         const taskId = response.data._id;
         setTaskId(taskId);
       } catch (error) {
