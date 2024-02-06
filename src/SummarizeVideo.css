@@ -18,7 +18,21 @@
     text-align: center;
 }
 
-.summarizeVideo__messageWrapper {
+  .summarizeVideo__warningMessageWrapper__warningMessage {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #F44336
+}
+
+.summarizeVideo__warningMessageWrapper {
+    display: flex;
+    align-items: center; /* Align items vertically */
+  }
+
+.summarizeVideo__uploadMessageWrapper {
     margin-top: 1rem;
     margin-bottom: 1rem;
     display: flex;
@@ -34,7 +48,7 @@
 }
 
 
-.summarizeVideo__messageWrapper__message {
+.summarizeVideo__uploadMessageWrapper__message {
     display: flex;
     flex-direction: column;
     justify-content: center;

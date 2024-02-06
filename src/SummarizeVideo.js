@@ -9,7 +9,8 @@ import { useGetVideo } from "./apiHooks";
 import keys from "./keys";
 import LoadingSpinner from "./LoadingSpinner";
 import { ErrorBoundary } from "./ErrorBoundary";
-import WarningIcon from "./Warning_Green.svg";
+import WarningIcon from "./Warning.svg";
+import greenWarningIcon from "./Warning_Green.svg";
 
 /** Summarize a Video App
  *
@@ -18,24 +19,19 @@ import WarningIcon from "./Warning_Green.svg";
  */
 
 export function SummarizeVideo({ index, videoId, refetchVideos }) {
-  const {
-    data: video,
-    refetch: refetchVideo,
-    isLoading,
-  } = useGetVideo(index, videoId, Boolean(videoId));
+  const { data: video, isLoading } = useGetVideo(
+    index,
+    videoId,
+    Boolean(videoId)
+  );
 
   const [field1, field2, field3] = ["summary", "chapter", "highlight"];
-  const [field1Prompt, setField1Prompt] = useState({
-    isChecked: true,
-  });
-  const [field2Prompt, setField2Prompt] = useState({
-    isChecked: true,
-  });
-  const [field3Prompt, setField3Prompt] = useState({
-    isChecked: true,
-  });
+  const [field1Prompt, setField1Prompt] = useState({ type: null });
+  const [field2Prompt, setField2Prompt] = useState({ type: null });
+  const [field3Prompt, setField3Prompt] = useState({ type: null });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVideoTitle, setShowVideoTitle] = useState(false);
+  const [showCheckWarning, setShowCheckWarning] = useState(false);
   const [taskVideo, setTaskVideo] = useState(null);
 
   const queryClient = useQueryClient();
@@ -84,14 +80,14 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
         resetPrompts={resetPrompts}
       />
       {!video && (
-        <div className="summarizeVideo__messageWrapper">
+        <div className="summarizeVideo__uploadMessageWrapper">
           <img
-            className="summarizeVideo__messageWrapper__warningIcon"
-            src={WarningIcon}
-            alt="WarningIcon"
+            className="summarizeVideo__uploadMessageWrapper__warningIcon"
+            src={greenWarningIcon}
+            alt="greenWarningIcon"
           ></img>
           <div>
-            <p className="summarizeVideo__messageWrapper__message">
+            <p className="summarizeVideo__uploadMessageWrapper__message">
               Please upload a video
             </p>
           </div>
@@ -112,6 +108,18 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
           {showVideoTitle && (
             <div className="summarizeVideo__videoTitle">{vidTitleClean}</div>
           )}
+          {showCheckWarning && (
+            <div className="summarizeVideo__warningMessageWrapper">
+              <img
+                className="summarizeVideo__warningMessageWrapper__warningIcon"
+                src={WarningIcon}
+                alt="WarningIcon"
+              ></img>
+              <div className="summarizeVideo__warningMessageWrapper__warningMessage">
+                Please select one of the checkboxes
+              </div>
+            </div>
+          )}
           {video && (
             <InputForm
               video={video}
@@ -126,6 +134,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
               field3={field3}
               setIsSubmitted={setIsSubmitted}
               setShowVideoTitle={setShowVideoTitle}
+              setShowCheckWarning={setShowCheckWarning}
             />
           )}
           {video && (

@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useRef, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import keys from "./keys";
 import "./InputForm.css";
@@ -10,64 +10,57 @@ import "./InputForm.css";
  */
 export function InputForm({
   video,
-  field1Prompt,
   setField1Prompt,
-  field2Prompt,
   setField2Prompt,
-  field3Prompt,
   setField3Prompt,
   field1,
   field2,
   field3,
   setIsSubmitted,
   setShowVideoTitle,
+  setShowCheckWarning,
 }) {
   const queryClient = useQueryClient();
 
-  /** Toggle check for each prompt */
-  function handleCheck(promptType) {
-    setIsSubmitted(false);
-
-    switch (promptType) {
-      case field1:
-        setField1Prompt((prevState) => ({
-          ...prevState,
-          isChecked: !prevState.isChecked,
-        }));
-        break;
-      case field2:
-        setField2Prompt((prevState) => ({
-          ...prevState,
-          isChecked: !prevState.isChecked,
-        }));
-        break;
-      case field3:
-        setField3Prompt((prevState) => ({
-          ...prevState,
-          isChecked: !prevState.isChecked,
-        }));
-        break;
-      default:
-        break;
-    }
-  }
+  const summaryRef = useRef(null);
+  const chaptersRef = useRef(null);
+  const highlightsRef = useRef(null);
 
   /** Combine user input and make API call(s)  */
   async function handleClick(event) {
     event.preventDefault();
 
-    if (field1Prompt.isChecked) {
-      field1Prompt["type"] = field1;
+    if (summaryRef.current?.checked) {
+      setField1Prompt({ type: field1 });
+    } else {
+      setField1Prompt(null);
     }
-    if (field2Prompt.isChecked) {
-      field2Prompt["type"] = field2;
+
+    if (chaptersRef.current?.checked) {
+      setField2Prompt({ type: field2 });
+    } else {
+      setField2Prompt(null);
     }
-    if (field3Prompt.isChecked) {
-      field3Prompt["type"] = field3;
+
+    if (highlightsRef.current?.checked) {
+      setField3Prompt({ type: field3 });
+    } else {
+      setField3Prompt(null);
+    }
+
+    if (
+      !summaryRef.current?.checked &&
+      !chaptersRef.current?.checked &&
+      !highlightsRef.current?.checked
+    ) {
+      setShowVideoTitle(false);
+      setShowCheckWarning(true);
+      return;
     }
 
     setIsSubmitted(true);
     setShowVideoTitle(true);
+    setShowCheckWarning(false);
 
     queryClient.invalidateQueries([
       keys.VIDEOS,
@@ -77,6 +70,12 @@ export function InputForm({
       "highlights",
     ]);
   }
+
+  useEffect(() => {
+    summaryRef.current.checked = true;
+    chaptersRef.current.checked = true;
+    highlightsRef.current.checked = true;
+  }, []);
 
   return (
     <div className="inputForm">
@@ -90,8 +89,7 @@ export function InputForm({
               data-cy="data-cy-checkbox-summary"
               id={field1}
               name={field1}
-              checked={field1Prompt.isChecked}
-              onChange={() => handleCheck(field1)}
+              ref={summaryRef}
             />
             <label
               className="inputForm__form__checkboxes__wrapper__label"
@@ -104,11 +102,10 @@ export function InputForm({
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
+              ref={chaptersRef}
               data-cy="data-cy-checkbox-chapters"
               id={field2}
               name={field2}
-              checked={field2Prompt.isChecked}
-              onChange={() => handleCheck(field2)}
             />
             <label
               className="inputForm__form__checkboxes__wrapper__label"
@@ -121,11 +118,10 @@ export function InputForm({
             <input
               className="inputForm__form__checkboxes__wrapper__checkbox"
               type="checkbox"
+              ref={highlightsRef}
               data-cy="data-cy-checkbox-highlights"
               id={field3}
               name={field3}
-              checked={field3Prompt.isChecked}
-              onChange={() => handleCheck(field3)}
             />
             <label
               className="inputForm__form__checkboxes__wrapper__label"
@@ -139,11 +135,6 @@ export function InputForm({
           className="inputForm__form__button"
           data-cy="data-cy-generate-button"
           onClick={handleClick}
-          disabled={
-            !field1Prompt.isChecked &&
-            !field2Prompt.isChecked &&
-            !field3Prompt.isChecked
-          }
         >
           Generate
         </button>{" "}

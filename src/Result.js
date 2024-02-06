@@ -28,23 +28,17 @@ export function Result({
   const { data: field1Result } = useGenerateSummary(
     field1Prompt,
     video?._id,
-    Boolean(
-      video?._id && field1Prompt.type && field1Prompt.isChecked && isSubmitted
-    )
+    Boolean(video?._id && field1Prompt?.type && isSubmitted)
   );
   const { data: field2Result } = useGenerateChapters(
     field2Prompt,
     video?._id,
-    Boolean(
-      video?._id && field2Prompt.type && field2Prompt.isChecked && isSubmitted
-    )
+    Boolean(video?._id && field2Prompt?.type && isSubmitted)
   );
   const { data: field3Result } = useGenerateHighlights(
     field3Prompt,
     video?._id,
-    Boolean(
-      video?._id && field3Prompt.type && field3Prompt.isChecked && isSubmitted
-    )
+    Boolean(video?._id && field3Prompt?.type && isSubmitted)
   );
   const queryClient = useQueryClient();
 
@@ -56,7 +50,7 @@ export function Result({
       "chapters",
       "highlights",
     ]);
-  }, [field1Prompt, field2Prompt, field3Prompt]);
+  }, [field1Prompt?.type, field2Prompt?.type, field3Prompt?.type]);
 
   /** Format seconds to hours:minutes:seconds */
   function formatTime(timeInSeconds) {
@@ -72,7 +66,7 @@ export function Result({
   return (
     <ErrorBoundary>
       <div className="result">
-        {field1Prompt.isChecked && isSubmitted && (
+        {field1Prompt?.type && isSubmitted && (
           <div className="result__summary">
             <h2 className="result__summary__title">Sentences</h2>
             {field1Result ? (
@@ -84,7 +78,7 @@ export function Result({
             )}
           </div>
         )}
-        {field2Prompt.isChecked && isSubmitted && (
+        {field2Prompt?.type && isSubmitted && (
           <div className="result__chapters">
             <h2 className="result__chapters__title">Chapters</h2>
             <div className="result__chapters__wrapper">
@@ -128,7 +122,7 @@ export function Result({
             </div>
           </div>
         )}
-        {field3Prompt.isChecked && isSubmitted && (
+        {field3Prompt?.type && isSubmitted && (
           <div className="result__highlights">
             <h2 className="result__highlights__title">Highlights</h2>
             <div className="result__highlights__wrapper">
