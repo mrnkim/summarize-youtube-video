@@ -20,7 +20,7 @@
     text-align: left;
 }
 
-.result__chapters__wrapper__chapter__wrapper__summary {
+.result__chapters__wrapper__chapter__wrapper__summary, .result__highlights__wrapper__highlight__timeSummary__summary {
     font-size: 16px;
     font-weight: 400;
     line-height: 28px;

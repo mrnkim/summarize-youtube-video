@@ -1,5 +1,4 @@
 import { React, useEffect } from "react";
-import { TitleAndSummary } from "./TitleAndSummary";
 import { Video } from "./Video";
 import { useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "./LoadingSpinner";
@@ -145,11 +144,9 @@ export function Result({
                         {formatTime(highlight.start)} -{" "}
                         {formatTime(highlight.end)}
                       </div>
-                      <TitleAndSummary
-                        summary={
-                          highlight.highlight_summary || highlight.highlight
-                        }
-                      />
+                      <div className="result__highlights__wrapper__highlight__timeSummary__summary">
+                        {highlight.highlight_summary || highlight.highlight}
+                      </div>
                     </div>
                   </div>
                 ))}
