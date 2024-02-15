@@ -15,7 +15,7 @@ export function useGetVideos(indexId) {
         );
         return response.data;
       } catch (error) {
-        throw error.response?.data || error;
+        return error;
       }
     },
   });
