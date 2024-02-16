@@ -6,6 +6,11 @@ import LoadingSpinner from "./LoadingSpinner";
 import { useGetTask } from "./apiHooks";
 import "./Task.css"
 
+/** Gets and shows status of a task
+ *
+ * VideoUrlUploadForm -> Task
+ *
+ */
 export function Task({ taskId, refetchVideos, setTaskVideo }) {
   const { data } = useGetTask(taskId);
 

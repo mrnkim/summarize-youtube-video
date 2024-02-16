@@ -9,6 +9,11 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import apiConfig from "./apiConfig";
 import ErrorFallback from "./ErrorFallback";
 
+/** App that generates the written summary, chapters, and highlights of a video
+ *
+ * App -> SummarizeVideo
+ *
+ */
 function App() {
   const { data: videos, refetch: refetchVideos } = useGetVideos(
     apiConfig.INDEX_ID

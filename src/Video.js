@@ -6,6 +6,7 @@ import "./Video.css";
  *
  * SummarizeVideo -> Video
  * SummarizeVideo -> {VideoUrlUploadForm} -> Video
+ * SummarizeVideo -> {Result} -> Video
  *
  */
 

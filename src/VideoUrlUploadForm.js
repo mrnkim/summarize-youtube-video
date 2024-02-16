@@ -11,7 +11,7 @@ import apiConfig from "./apiConfig";
 
 /** Receive user's video file, submit it to API, and show task status
  *
- * App -> SummarizeVideo -> {VideoFileUploadForm} -> Video
+ * SummarizeVideo -> {VideoFileUploadForm} -> {Video, Task}
  *
  */
 

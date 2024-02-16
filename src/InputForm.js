@@ -5,7 +5,7 @@ import "./InputForm.css";
 
 /** Receive user's check prompt for the API call
  *
- * App -> SummarizeVideo -> {InputForm}
+ * SummarizeVideo -> {InputForm}
  *
  */
 export function InputForm({

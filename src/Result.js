@@ -13,7 +13,7 @@ import { ErrorBoundary } from "./ErrorBoundary";
 
 /** Shows the results
  *
- * App -> SummarizeVideo -> {Result}
+ * SummarizeVideo -> {Result} -> Video
  *
  */
 
