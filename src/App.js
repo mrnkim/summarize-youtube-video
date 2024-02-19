@@ -29,8 +29,8 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={<LoadingSpinner />}>
         <div className="app">
-          {!videos.data && <ErrorFallback error={videos} />}
-          {videos.data && (
+          {!videos?.data && <ErrorFallback error={videos} />}
+          {videos?.data && (
             <SummarizeVideo
               index={apiConfig.INDEX_ID}
               videoId={videos.data[0]?._id || null}
