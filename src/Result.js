@@ -89,7 +89,7 @@ export function Result({
                     key={chapter.chapter_title}
                   >
                     <Video
-                      url={video.source.url}
+                      url={video.source?.url || video.hls?.video_url}
                       start={chapter.start}
                       end={chapter.end}
                       width={"221px"}
@@ -133,7 +133,7 @@ export function Result({
                     key={highlight.highlight}
                   >
                     <Video
-                      url={video.source.url}
+                      url={video.source?.url || video.hls?.video_url}
                       start={highlight.start}
                       end={highlight.end}
                       width={"221px"}

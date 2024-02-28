@@ -99,7 +99,7 @@ export function SummarizeVideo({ index, videoId, refetchVideos }) {
             {isLoading && <LoadingSpinner />}
             {video && (
               <Video
-                url={video.source?.url}
+                url={video.source?.url || video.hls.video_url}
                 width={"381px"}
                 height={"214px"}
               />
