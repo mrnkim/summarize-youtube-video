@@ -97,14 +97,14 @@ app.get(
 /** Summarize a video */
 app.post("/videos/:videoId/summarize", async (request, response, next) => {
   const videoId = request.params.videoId;
-  let data = request.body.data;
+  let type = request.body.data;
 
   try {
     const options = {
       method: "POST",
       url: `${API_BASE_URL}/summarize`,
       headers: { ...HEADERS, accept: "application/json" },
-      data: { ...data, video_id: videoId },
+      data: { ...type, video_id: videoId },
     };
     const apiResponse = await axios.request(options);
     response.json(apiResponse.data);

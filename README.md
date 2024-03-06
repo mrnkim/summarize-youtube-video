@@ -7,7 +7,7 @@
 This app's got your back when you need a speedy text summary of any video in your sights. Whether you're a content creator gearing up to make your own video, or simply looking to dissect a benchmark video, this app helps you swiftly capture the essence, structure, and key highlights. It's your shortcut to finding those standout elements to make your content shine!
 
 <div style="border: 1px solid black;">
-  <img src="public/Get%20Inspiration_v3_Result.JPG" alt="app screenshot" />
+  <img src="public/Screenshot.JPG" alt="app screenshot" />
 </div>
 
 ### Built With
