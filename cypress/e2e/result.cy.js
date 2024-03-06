@@ -16,11 +16,12 @@ describe("Result", () => {
     cy.contains("Highlights");
   });
 
-  it("disables generate button when all checkboxes are unchecked", () => {
+  it("shows warning message when all checkboxes are unchecked", () => {
     cy.visit("/");
     cy.get('[data-cy="data-cy-checkbox-summary"]').click({ force: true });
     cy.get('[data-cy="data-cy-checkbox-chapters"]').click({ force: true });
     cy.get('[data-cy="data-cy-checkbox-highlights"]').click({ force: true });
-    cy.get('[data-cy="data-cy-generate-button"]').should("be.disabled");
+    cy.get('[data-cy="data-cy-generate-button"]').click({ force: true });
+    cy.contains("Please select one of the checkboxes");
   });
 });
