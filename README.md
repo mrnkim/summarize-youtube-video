@@ -32,16 +32,17 @@ git clone git@github.com:mrnkim/summarize-youtube-video.git
 
 1. Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate your API Key
    - Once you sign up, you'll receive complimentary credits allowing you to index up to 10 hours of video content!
-2. Create an index and save the index id (Visit [Twelve Labs Docs](https://docs.twelvelabs.io/docs/create-indexes) for details)
-3. Create `.env` file at the root level and store/update the values of SERVER_URL, PORT_NUMBER, API_KEY, and INDEX_ID.
-   (* API_URL should be the link below (v1.2))
+2. [Create an index](<(https://docs.twelvelabs.io/reference/create-index)>) and save the index id
+   - index id looks something like `642c0581370f870fb3bb01be`
+   - If you have already created index(es) before, retrieve the id(s) by making a [GET request to /indexes](https://docs.twelvelabs.io/reference/list-indexes)
+3. Create `.env` file at the root level and store/update the values of each key.
 
    ```
    .env
 
     REACT_APP_SERVER_URL=<YOUR_SERVER_URL> //e.g., http://localhost
     REACT_APP_PORT_NUMBER=<YOUR_PORT_NUMBER> //e.g., 4001
-    REACT_APP_API_URL=https://api.twelvelabs.io/v1.2
+    REACT_APP_API_URL=https://api.twelvelabs.io/v1.2 //v1.2 required
     REACT_APP_API_KEY=<YOUR_API_KEY>
     REACT_APP_INDEX_ID=<YOUR_INDEX_ID>
 
