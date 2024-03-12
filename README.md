@@ -32,7 +32,7 @@ git clone git@github.com:mrnkim/summarize-youtube-video.git
 
 1. Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate your API Key
    - Once you sign up, you'll receive complimentary credits allowing you to index up to 10 hours of video content!
-2. [Create an index](<(https://docs.twelvelabs.io/reference/create-index)>) and save the index id
+2. [Create an index](https://docs.twelvelabs.io/reference/create-index) and save the index id
    - index id looks something like `642c0581370f870fb3bb01be`
    - If you have already created index(es) before, retrieve the id(s) by making a [GET request to /indexes](https://docs.twelvelabs.io/reference/list-indexes)
 3. Create `.env` file at the root level and store/update the values of each key.
