@@ -1,5 +1,5 @@
 modules = ["nodejs-20", "web"]
-run = "npm run start"
+run = "node server.js & npm start"
 
 [nix]
 channel = "stable-23_11"
@@ -10,3 +10,7 @@ run = ["sh", "-c", "npm run start"]
 [[ports]]
 localPort = 3000
 externalPort = 80
+
+[[ports]]
+localPort = 4001
+externalPort = 3000
