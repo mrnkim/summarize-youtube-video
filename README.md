@@ -1,13 +1,17 @@
 <a id="readme-top"></a>
 
-# Summarize a Youtube Video
+# Summarize a YouTube Video
 
 ## 👋 Introduction
 
 This app's got your back when you need a speedy text summary of any video in your sights. Whether you're a content creator gearing up to make your own video, or simply looking to dissect a benchmark video, this app helps you swiftly capture the essence, structure, and key highlights. It's your shortcut to finding those standout elements to make your content shine!
 
-<div style="border: 1px solid black;">
-  <img src="public/Screenshot.JPG" alt="app screenshot" />
+📌 Check out the [Demo](https://summarize-youtube-video-vercel-client.vercel.app/)! (_Note: This simplified version of the app does not include the video upload form_)
+
+<div align="center">
+  <a href="https://summarize-youtube-video-vercel-client.vercel.app/">
+    <img src="public/Screenshot.JPG" alt="search result screenshot" style="border: 1px solid black;" />
+  </a>
 </div>
 
 ### Built With
@@ -22,42 +26,51 @@ This app's got your back when you need a speedy text summary of any video in you
 
 ## 🔑 Getting Started
 
-### Step 1. Clone the repo
+### Step 1. Generate Twelve Labs API Key
 
-```sh
-git clone git@github.com:mrnkim/summarize-youtube-video.git
-```
+Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate your API Key
 
-### Step 2. Generate API Key and create an Index
+- Upon signing up, you'll receive free credits to index up to 10 hours of video content!
 
-1. Visit [Twelve Labs Playground](https://playground.twelvelabs.io/) to generate your API Key
-   - Once you sign up, you'll receive complimentary credits allowing you to index up to 10 hours of video content!
-2. [Create an index](https://docs.twelvelabs.io/reference/create-index) and save the index id
-   - Make sure to set  `engine_name` as `pegasus1` and `engine_options` as `visual`, `conversation`
-   - index id looks something like `642c0581370f870fb3bb01be`
-   - If you have already created index(es) before, retrieve the id(s) by making a [GET request to /indexes](https://docs.twelvelabs.io/reference/list-indexes)
-3. Create `.env` file at the root level and store/update the values of each key.
+### Step 2 (Option 1). Start the App on Replit
+
+1. Click the button below and fork the repl
+
+   [![Run on Replit](https://replit.com/badge/github/mrnkim/summarize-youtube-video)](https://replit.com/@twelvelabs/summarize-youtube-video)
+
+2. Update Secrets (equivalent to .env)
 
    ```
-   .env
-
-    REACT_APP_SERVER_URL=<YOUR_SERVER_URL> //e.g., http://localhost
-    REACT_APP_PORT_NUMBER=<YOUR_PORT_NUMBER> //e.g., 4001
-    REACT_APP_API_URL=https://api.twelvelabs.io/v1.2 //v1.2 required
-    REACT_APP_API_KEY=<YOUR_API_KEY>
-    REACT_APP_INDEX_ID=<YOUR_INDEX_ID>
-
+   REACT_APP_API_KEY=<YOUR API KEY>
+   REACT_APP_INDEX_ID=<YOUR INDEX ID>
    ```
 
-### Step 3. Start the server and the client
+3. Stop and Run the Repl again
 
-1. Start the server
+### Step 2 (Option 2). Start the App Locally
+
+1. Clone the current repo
 
    ```sh
-   nodemon server.js
+   git clone git@github.com:mrnkim/summarize-youtube-video.git
    ```
 
-1. Install and start the client
+2. Create `.env` file in the root directory and provide the values for each key
+
+   ```
+    REACT_APP_API_KEY=<YOUR_API_KEY>
+    REACT_APP_INDEX_ID=<YOUR_INDEX_ID>
+    REACT_APP_SERVER_URL=<YOUR_SERVER_URL> //e.g., http://localhost
+    REACT_APP_PORT_NUMBER=<YOUR_PORT_NUMBER> //e.g., 4001
+   ```
+
+3. Start the server
+
+   ```sh
+   node server.js
+   ```
+
+4. Install and start the client
 
    ```sh
    npm install
@@ -68,7 +81,7 @@ git clone git@github.com:mrnkim/summarize-youtube-video.git
 
 ## 🎯 What's Next?
 
-- Add tests
+- Add more tests
 - Improve error handling and add data validations
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
